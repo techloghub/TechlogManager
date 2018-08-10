@@ -1,0 +1,77 @@
+{% extends '::base.html.twig' %}
+{% block main %}
+<style type="text/css">
+    .content_title { font-weight: bold; }
+</style>
+
+<div class="centercontent">
+    <div class="pageheader notab">
+        <h1 class="pagetitle">权限管理</h1><br>
+        <span class="pagedesc" class="field"><a target="_blank" href="{{ path('user_user_list') }}" class="btn btn_link"><span>查询用户</span></a></span>
+        <span class="pagedesc" class="field"><a target="_blank" href="{{ path('user_user_add') }}" class="btn btn_link"><span>添加用户角色</span></a></span>
+    </div>
+    <!--pageheader-->
+
+    <div id="contentwrapper" class="contentwrapper">
+        <form id="submitForm" class="stdform" action="" method="post">
+            <input type="hidden" id="entity_id" name="entity_id" value="{{ user.id }}"/>
+            <div>
+                <p>
+                    <label>用户名称</label>
+                    <span class="field">
+                        <input type="text" id="username" name="username" class="smallinput" value="{{ user.username }}"/>
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>角色名称</label>
+                    <span class="field">
+                        <select id="roleId" name="roleId" class="uniformselect">
+                            <option value="0">请选择</option>
+                            {% for one in roleList %}
+                            <option value="{{ one.id }}" {% if user.roleId == one.id %}selected="selected"{% endif %}>{{ one.roleName}}</option>
+                            {% endfor %}
+                        </select>
+                    </span>
+                </p>
+            </div>
+            {% if user.id %}
+                <div>
+                    <p>
+                        <label>操作人</label>
+                        <span class="field"><input type="text" id="operator" name="operator" class="smallinput" value="{{ user.operator }}" disabled="disabled"/></span>
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        <label>创建时间</label>
+                        <span class="field"><input type="text" id="createTime" name="createTime" class="smallinput" value="{{ user.createTime | date('Y-m-d H:i:s') }}" disabled="disabled"/></span>
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        <label>更新时间</label>
+                        <span class="field"><input type="text" id="updateTime" name="updateTime" class="smallinput" value="{{ user.updateTime | date('Y-m-d H:i:s') }}" disabled="disabled"/></span>
+                    </p>
+                </div>
+            {% endif %}
+            <div>
+                <p> 
+                    <label>操作</label>
+                    <button id="submitform_sub" type="submit" class="submit radius2">提交</button>
+                </p>
+            </div>
+        </form>
+        <br clear="all"><br>
+    </div><!--contentwrapper-->
+</div><!--centercontent-->
+
+<script type="text/javascript">
+    //需要传入下面js的变量定义
+    var GLOBAL_CONF = {
+        "action_add" : "{{ path('user_user_add') }}"
+    };
+</script>
+<script type="text/javascript" src="/bundles/manageruser/js/user/modify.js"></script>
+{% endblock %}

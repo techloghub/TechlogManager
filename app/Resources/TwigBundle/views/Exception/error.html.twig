@@ -1,0 +1,34 @@
+{% extends '::base.html.twig' %}
+{% block main %}
+<style type="text/css">
+    .link_blue { color: blue }
+</style>
+<div class="centercontent">
+    <div class="contentwrapper">
+    	<div class="errorwrapper">
+        	<div class="errorcontent">
+                <h1>{{ exception.getMessage }}</h1>
+                {% if status_code == '403' %}
+                    <h3>Sorry, 您没有访问该页面的权限</h3>
+                {% else %}
+                    <h3>服务器错误</h3>
+                {% endif %}
+                
+                {% if status_code == '403' %}
+                    <p>您可以进行以下步骤</p>
+                    <ul>
+                        <li>发邮件至<a class="link_blue" href="mailto:zeyu203@qq.com">zeyu203@qq.com</a>申请权限</li>
+                        <li>权限开通后再次访问该页面</li>
+                    </ul>
+                {% else %}
+                    <p>您可以进行以下步骤</p>
+                    <ul>
+                        <li>发邮件至<a class="link_blue" href="mailto:zeyu203@qq.com">zeyu203@qq.com</a>报告此情况</li>
+                    </ul>
+                {% endif %}
+            </div><!--errorcontent-->
+        </div><!--errorwrapper-->
+    </div>
+
+</div><!--centercontent-->
+{% endblock %}

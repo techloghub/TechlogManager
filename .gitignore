@@ -1,0 +1,5 @@
+app/config/parameters.yml
+app/config/chima.nginx.conf
+app/config/nginx.conf
+app/cache
+app/logs

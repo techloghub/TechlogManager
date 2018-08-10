@@ -1,0 +1,114 @@
+parameters:
+    tool.curlhelper.class: Component\Helper\CurlHelper
+    tool.uploadhelper.class: Component\Helper\UploadHelper
+    sdk_network.class: Component\NetWork\NetWorkSDK
+    sdk_qstore.class: Component\QStore\QStoreSDK
+    data_exporter.class: Component\Export\DataExporter
+    manager_login.class: Component\User\ManagerLogin
+    role_service.class: Component\User\RoleService
+    tool.excel_helper.class: Component\Helper\ExcelHelper
+    email_group_fetcher.class: Component\Email\EmailGroupFetcher
+
+    #tool log path
+    job.log: %kernel.logs_dir%/job.log
+    send_mail.log: %kernel.logs_dir%/send_mail.log
+    send_sms.log: %kernel.logs_dir%/send_sms_new.log
+    common.log: %kernel.logs_dir%/common.log
+    front.log: %kernel.logs_dir%/front.log
+    upload.dir: %web.path%/upload
+
+services:
+    job.logger:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: [JOB]
+        calls:
+            - [pushHandler, ['@job.logger_handler']]
+
+    job.logger_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: [%job.log%, 200]
+
+    job_queue:
+        class: Component\Job\JobQueue
+        arguments: [ "@service_container" ]
+
+    email_group_fetcher:
+        class: "%email_group_fetcher.class%"
+        arguments: [ "@service_container" ]
+
+    helper_excel:
+        class: "%tool.excel_helper.class%"
+        arguments: [ "@service_container" ]
+
+    #监控系统请求listener
+    kernel.listener.manager_request_listener:
+        class: Manager\ApiBundle\EventListener\ManagerRequestListener
+        arguments: [ "@service_container" ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            - { name: "monolog.logger", channel: "event" }
+
+    #用户的角色服务
+    user.role_service:
+        class: "%role_service.class%"
+        arguments: [ "@service_container" ]
+
+    #manager用户登陆服务
+    manager_login:
+        class: "%manager_login.class%"
+        tags:
+            - { name: "monolog.logger", channel: "login" }
+
+    helper_curl:
+        class: "%tool.curlhelper.class%"
+        arguments: [ "@service_container" ]
+        tags:
+            - { name: "monolog.logger", channel: "curl" }
+
+    helper_upload:
+        class: "%tool.uploadhelper.class%"
+        arguments: [ "@service_container", "%upload.dir%" ]
+        tags:
+            - { name: "monolog.logger", channel: "upload" }
+
+    sdk_qstore:
+        class: %sdk_qstore.class%
+        arguments: [ "@service_container" ]
+
+    sdk_network:
+        class: %sdk_network.class%
+        arguments: [ "@service_container" ]
+
+    data_exporter:
+        class: %data_exporter.class%
+        arguments: [ "@service_container", %data_exporter.out_dir% ]
+
+    sdk_mail:
+        class: Component\Email\SendMail
+        arguments: [ "@service_container" ]
+
+    sdk_mail.logger:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: [MAIL]
+        calls:
+            - [pushHandler, ['@sdk_mail.logger_handler']]
+
+    sdk_mail.logger_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: [%send_mail.log%, 100]
+
+    # 避免总是添加logger文件
+    common.logger_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: [%common.log%, 100]
+
+    front.logger:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: [front]
+        calls:
+            - [pushHandler, ['@front.logger_handler']]
+
+    # 避免总是添加logger文件
+    front.logger_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: [%front.log%, 100]

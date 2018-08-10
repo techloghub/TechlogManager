@@ -1,0 +1,109 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: "@ManagerUserBundle/Resources/config/services.yml" }
+    - { resource: "@ManagerTechlogBundle/Resources/config/services.yml" }
+
+framework:
+    #esi:             ~
+    translator:      { fallback: "%locale%" }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: "%kernel.debug%"
+    form:            true
+    csrf_protection: true
+    validation:      { enable_annotations: true }
+    templating:      { engines: ['twig', 'php'] } #assets_version: SomeVersionScheme
+    default_locale:  "%locale%"
+    trust_proxy_headers: false # Deprecated in 2.0; will be removed in 2.3 (used trusted_proxies instead)
+    trusted_proxies: ~
+    session:         ~
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+
+# Assetic Configuration
+assetic:
+    debug:          "%kernel.debug%"
+    use_controller: false
+    bundles:        [ ]
+    filters:
+        cssrewrite: ~
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        default_connection:   default
+        connections:
+            default:
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
+                schema_filter: ~^(?!stats)~
+
+    orm:
+        default_entity_manager:   default
+        entity_managers:
+            default:
+                connection:       default
+                mappings:
+                    ManagerUserBundle: ~
+                    ManagerTechlogBundle: ~
+                    ManagerChargeBundle: ~
+
+doctrine_mongodb:
+    connections:
+        default:
+    document_managers:
+        default:
+            database: 
+            metadata_cache_driver: array
+            auto_mapping: true
+            mappings:
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    #spool:     { type: memory } #去掉该spool的配置。由于有该spool配置，即使在transport用sendmail的时候，也会默认转到用spool类型来执行（为了性能），但此方式无法命令行中使用（因为没有onTerminate事件，不会造成调用最后发送的flushQueue操作），所以禁掉此配置。
+
+monolog:
+    handlers:
+        error:
+            type:  stream
+            path:  "%kernel.logs_dir%/%kernel.environment%.error.log"
+            level: error
+        event_file:
+            type: stream
+            path: %kernel.logs_dir%/event/event.log
+            level: info
+            channels: event
+        upload_file:
+            type: stream
+            path: %kernel.logs_dir%/upload.log
+            level: info
+            channels: upload
+        login_file:
+            type: stream
+            path: %kernel.logs_dir%/login.log
+            level: info
+            channels: login
+        doctrine:
+            action_level: debug
+            type:  stream
+            path:  %kernel.logs_dir%/%kernel.environment%_doctrine.log
+            channels: doctrine
+
+bcc_resque:
+    class: BCC\ResqueBundle\Resque           # the resque class if different from default
+    vendor_dir: %kernel.root_dir%/../vendor  # the vendor dir if different from default
+    prefix: resque                 # !!!必须得是resque, 因为调用resque执行时无法传入该值（resque执行用的默认的值）

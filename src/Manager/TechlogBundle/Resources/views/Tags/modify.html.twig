@@ -1,0 +1,104 @@
+{% extends '::base.html.twig' %}
+{% block main %}
+<style type="text/css">
+    .content_title { font-weight: bold; }
+    #logo_table .extra { display: none; }
+    td a {text-decoration:underline;color:blue;} /* 修改默认链接样式 */
+</style>
+
+<div class="centercontent">
+    <div class="pageheader">
+        <h1 class="pagetitle">标签修改</h1>
+        <ul class="hornav">
+            <li><a href="{{ path('techlog_manager_tags_list') }}">标签管理</a></li>
+            <li class="current"><a href="{{ path('techlog_manager_tag_modify', {'tag_id':data.tagID}) }}">标签修改</a></li>
+        </ul>
+    </div>
+
+    <form id="modifyform" name="modifyform" class="stdform_q" method="post">
+        <div style="margin-top:40px;">
+            <p>
+                <label>ID</label>
+                <span class="field"><input type="text" id="tag_id" name="tag_id" class="smallinput" value="{{ data.tagId }}" readonly="readonly" /></span>
+            </p>
+        </div>
+        <div>
+            <p>
+                <label>标签名称</label>
+                <span class="field"><input type="text" id="tag_name" name="tag_name" class="smallinput" value="{{ data.tagName }}"/></span>
+            </p>
+        </div>
+		<div>
+			<p>
+				<label>操作</label>
+				<span class="field">
+				<button type="button" onclick="confirm_submit()">提交</button>
+				</span>
+			</p>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+function confirm_submit()
+{
+	if ($('#tag_name').val() == '')
+	{
+		jAlert('标签名称不能为空', '提示');
+		return false;
+	}
+
+    jConfirm
+	(
+	 	"请确认是否提交？",
+		"提示",
+		function(r)
+		{
+			if(r)
+			{
+				$.ajax
+				(
+					{
+						'url'	: "{{ path('techlog_manager_tags_modifybasic') }}",
+						'type'	: 'post',
+						'data'	: get_params(),
+                        'dataType' : 'json',
+                        "error" : function (jqXHR, textStatus, errorThrown) 
+                        {
+                            var errMsg = errorThrown == 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!"; jAlert(errMsg, "提示");
+                        },
+                        "success" : function (data) 
+                        {
+                            if (data['code'] != 0) 
+                            {
+                                jAlert("error: " + data['msg']);
+                            }
+                            else
+                            {
+                                jAlert(data['msg'], "提示", function()
+                                    {
+                                        window.location.href=data['url'];
+                                    }
+                                );
+                            }
+                        }
+					}
+				);
+			}
+    	}
+	);
+    return false;
+}
+
+function get_params()
+{
+	var keys = {'tag_id':1, 'tag_name':1};
+
+	var params = {};
+	for (var key in keys)
+		params[key] = $.trim($('#'+key).val());
+
+	return params;
+}
+</script>
+{% endblock %}

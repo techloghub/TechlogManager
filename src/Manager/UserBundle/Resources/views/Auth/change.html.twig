@@ -1,0 +1,59 @@
+{% extends '::base.html.twig' %}
+{% block main %}
+<style type="text/css">
+    .content_title { font-weight: bold; }
+</style>
+<div class="centercontent">
+    <div class="pageheader">
+        <h1 class="pagetitle">用户名管理</h1><br>
+    <ul class="hornav">
+        <li><a href="{{ path('user_auth_list') }}">用户列表</a></li>
+        <li><a href="{{ path('user_auth_new') }}">新建用户</a></li>
+    </ul>
+    </div>
+    <!--pageheader-->
+
+    <div id="contentwrapper" class="contentwrapper">
+        <p style="color:red;">*注意：1.用户名不能有空格。2.新建用户名如果没有配置任何权限将无法登录。</p>
+        <form id="submitForm" class="stdform" action="{{path('user_auth_modify')}}" method="post">
+            <input type="hidden" name="a_id" value="{{entity.id}}">
+            <div>
+                <p>
+                    <label>用户名（不能修改）</label>
+                    <span class="field">
+                        <input type="text" readonly="readonly" id="username" name="username" class="smallinput" value="{{entity.username}}"/>
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>邮箱</label>
+                    <span class="field">
+                        <input type="text" id="email" name="email" class="smallinput" value="{{entity.email}}"/>
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>新密码（没有修改则留空）</label>
+                    <span class="field">
+                        {% if not_user is defined and not_user==1 %}
+                        <input type="text" readonly="readonly" id="password" name="password" class="smallinput" value=""/>
+                        {% else %}
+                        <input style="padding: 8px 5px;border: 1px solid #ccc;border-radius: 2px;background: #fcfcfc;color: #666;box-shadow: inset 0 1px 3px #ddd;" type="password" id="password" name="password" class="smallinput" value=""/>
+                        {% endif %}
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p> 
+                    <label></label>
+                    <button id="submitform_sub" type="submit" class="submit radius2">提交</button>
+                </p>
+            </div>
+        </form>
+        <br clear="all"><br>
+    </div><!--contentwrapper-->
+</div><!--centercontent-->
+{% endblock %}
+

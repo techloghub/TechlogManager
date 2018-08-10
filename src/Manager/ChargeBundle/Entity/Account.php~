@@ -1,0 +1,88 @@
+<?php
+
+namespace Manager\ChargeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Account
+ *
+ * @ORM\Table(name="account")
+ * @ORM\Entity
+ */
+class Account
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=20, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="esid", type="string", length=50, nullable=false)
+     */
+    private $esid;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="inserttime", type="datetime", nullable=false)
+     */
+    private $inserttime;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updatetime", type="datetime", nullable=false)
+     */
+    private $updatetime;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="currency", type="string", length=20, nullable=false)
+     */
+    private $currency;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="orderno", type="integer", nullable=false)
+     */
+    private $orderno;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="category", type="string", length=10, nullable=false)
+     */
+    private $category;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="money", type="float", nullable=false)
+     */
+    private $money;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cardno", type="string", length=20, nullable=false)
+     */
+    private $cardno;
+
+
+}

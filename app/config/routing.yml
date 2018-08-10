@@ -1,0 +1,39 @@
+manager_charge:
+    resource: "@ManagerChargeBundle/Controller/"
+    type:     annotation
+    prefix:   /charge
+
+techlog_manager:
+    resource: "@ManagerTechlogBundle/Controller/"
+    type:     annotation
+    prefix:   /techlog_manager
+
+manager_api:
+    resource: "@ManagerApiBundle/Controller/"
+    prefix:   /api
+
+manager_user:
+    resource: "@ManagerUserBundle/Controller/"
+    type:     annotation
+    prefix:   /user
+
+admin_root:
+    pattern:  /
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /user/homepage
+        permanent: true
+
+BCCResqueBundle:
+    resource: "@BCCResqueBundle/Resources/config/routing.xml"
+    prefix:   /resque
+    
+
+# Internal routing configuration to handle ESI
+# ****** WARNING ******
+# This route should be enabled with caution as it can open a security vulnerability
+# see http://symfony.com/blog/security-release-symfony-2-0-20-and-2-1-5-released for more information
+# ****** WARNING ******
+#_internal:
+#    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+#    prefix:   /_internal

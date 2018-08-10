@@ -1,0 +1,40 @@
+<h4>总数：{{ total }}</h4><br/>
+<table id="logo_table" cellpadding="0" cellspacing="0" border="0" class="stdtable">
+    <thead class="center">
+        <tr>
+            <td width="5%">序号</td>
+            <td width="5%">角色名称</td>
+            <td width="5%">操作人员</td>
+            <td width="5%">更新时间</td>
+            <td width="5%">建立时间</td>
+            <td width="5%">操作</td>
+        </tr>
+    </thead>
+    <tbody class="center">
+        {% for role in data %}
+            <tr>
+                <td>{{ role.id }}</td>
+                <td>{{ role.name }}</td>
+                <td>{{ role.operator }}</td>
+                <td>{{ role.updateTime | date('Y-m-d H:i:s') }}</td>
+                <td>{{ role.createTime | date('Y-m-d H:i:s') }}</td>
+                <td class="actions">
+                    <a href="{{ path('user_role_add', {'id' : role.id}) }}" target="_blank">修改</a>
+                    <a class="app_delete" href="">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="gigantic pagination">
+    <a href="#" class="first" data-action="first">&laquo;</a>
+    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+    <input type="text" readonly="readonly" data-max-page="40" />
+    <a href="#" class="next" data-action="next">&rsaquo;</a>
+    <a href="#" class="last" data-action="last">&raquo;</a>
+</div>
+
+<input type="hidden" id="totalPages" value="{{ totalPages }}"/>
+<input type="hidden" id="start" value="{{ start }}"/>
+<input type="hidden" id="limit" value="{{ limit }}"/>

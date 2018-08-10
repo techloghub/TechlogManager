@@ -1,0 +1,30 @@
+parameters:
+    security.access.auth_voter.class: Manager\UserBundle\Security\Authentication\Voter\AuthVoter
+    manager_user.entity.provider.class: Manager\UserBundle\Security\User\UserRoleProvider
+    manager_user.security.authentication.provider.class: Manager\UserBundle\Security\Authentication\Provider\ManagerUserProvider
+    manager_user.security.authentication.listener.class: Manager\UserBundle\Security\Firewall\ManagerUserListener
+
+services:
+    security.access.auth_voter:
+        class: "%security.access.auth_voter.class%"     
+        arguments: [ "@service_container" ]
+        tags:
+            - { name: security.voter }
+            
+    manager_user.entity.provider:
+        class:  "%manager_user.entity.provider.class%"
+        arguments: [ "@service_container" ]
+            
+    manager_user.security.authentication.provider:
+        class:  "%manager_user.security.authentication.provider.class%"
+        arguments: [ "@manager_user.entity.provider" ]
+
+    manager_user.security.authentication.listener:
+        class:  "%manager_user.security.authentication.listener.class%"
+        arguments: [ "@security.context", "@service_container", "@manager_user.security.authentication.provider" ]
+
+    manager.handler.session_idle:
+        class: Manager\UserBundle\Handler\UserHandler
+        arguments: ["@session", "@security.context", "@router", %session_max_idle_time%]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

@@ -1,0 +1,47 @@
+<h4>总数：{{ total }}</h4><br/>
+<table id="" cellpadding="0" cellspacing="0" border="0" class="stdtable">
+    <thead class="center">
+        <tr>
+            <td width="5%">用户名</td>
+            <td width="5%">邮箱</td>
+            <td width="5%">创建时间</td>
+            <td width="5%">更新时间</td>
+            <td width="5%">最后操作人</td>
+            <td width="5%">操作</td>
+    </thead>
+    <tbody class="center">
+        {% for record in records %}
+            <tr>
+                <td>{{record['username']}}</td>
+                <td>{{record['email']}}</td>
+                <td>{{record['create_time']}}</td>
+                <td>{{record['update_time']}}</td>
+                <td>{{record['operator']}}</td>
+                <td><a href="{{path('user_auth_change', {'a_id': record['id']})}}">修改</a> | <span class="delete_user"><a href="{{path('user_auth_delete', {'a_id': record['id']})}}">删除</a></span></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="gigantic pagination">
+    <a href="#" class="first" data-action="first">&laquo;</a>
+    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+    <input type="text" readonly="readonly" data-max-page="{{ totalPages }}" />
+    <a href="#" class="next" data-action="next">&rsaquo;</a>
+    <a href="#" class="last" data-action="last">&raquo;</a>
+</div>
+
+<input type="hidden" id="totalPages" value="{{ totalPages }}"/>
+<input type="hidden" id="page" value="{{ page }}"/>
+<input type="hidden" id="page_size" value="{{ pageSize }}"/>
+
+<script>
+$(function(){
+    $(document).delegate("span.delete_user", "click", function() {
+        var cf = confirm("确定要删除此用户吗？");
+        if (!cf) {
+            return false;
+        }
+    });
+});
+</script>

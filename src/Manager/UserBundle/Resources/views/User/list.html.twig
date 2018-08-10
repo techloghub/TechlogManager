@@ -1,0 +1,80 @@
+{% extends '::base.html.twig' %}
+{% block main %}
+<style type="text/css">
+    .content_title { font-weight: bold; }
+    .uushine {background-color: #78B270;border: 1px solid #71AD69;color: #FFFFFF;height: 30px;line-height: 30px;padding: 10px;}
+</style>
+<div class="centercontent">
+    <div class="pageheader notab">
+        <h1 class="pagetitle">权限管理</h1><br>
+        <span class="pagedesc" class="field"><a href="{{ path('user_user_list') }}" class="btn btn_link"><span>查询用户</span></a></span>
+        <span class="pagedesc" class="field"><a target="_blank" href="{{ path('user_user_add') }}" class="btn btn_link"><span>添加用户角色</span></a></span>
+    </div>
+    <!--pageheader-->
+    <div id="contentwrapper" class="contentwrapper">
+        <form id="queryform" class="stdform_q" action="" method="post">
+            <div>
+                <p>
+                    <label>角色名称</label>
+                    <span class="field">
+                        <select id="roleId" name="roleId" class="uniformselect">
+                            <option value="0">请选择</option>
+                            {% if roleList is not empty %}
+                            {% for one in roleList %}
+                            <option value="{{ one.id }}">{{ one.roleName}}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>用户名称</label>
+                    <span class="field"><input type="text" id="username" name="username" class="smallinput" value=""/></span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>操作时间</label>
+                    <span class="field">
+                        <input type="text" id="startTime" name="startTime" class="smallinput" value=""/> ~ 
+                        <input type="text" id="endTime" name="endTime" class="smallinput" value=""/>
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>操作人</label>
+                    <span class="field"><input type="text" id="operator" name="operator" class="smallinput" value=""/></span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>操作</label>
+                    <span class="field"><button id="queryform_sub" class="submit radius2">查询</button></span>
+                </p>
+            </div>
+        </form>
+        <div class="contenttitle2">
+            <h3>列表结果</h3>
+        </div>
+        <div id="query_result">
+            {% include 'ManagerUserBundle:User:query_result.html.twig' %}
+        </div>
+        <img id="loaders" src="/images/loaders/loader6.gif" alt="">
+        <div clear="all"></div>
+    </div>
+    <!--contentwrapper-->
+</div>
+<!--centercontent-->
+
+<script type="text/javascript">
+    //需要传入下面js的变量定义
+    var GLOBAL_CONF = {
+        "action_delete" : "{{ path('user_user_delete') }}",
+        "action_query" : "{{ path('user_user_query') }}"
+    };
+</script>
+<script type="text/javascript" src="/bundles/manageruser/js/user/list.js"></script>
+{% endblock %}

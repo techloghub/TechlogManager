@@ -1,0 +1,26 @@
+{
+    "name": "irongit/symfony2-stream-response",
+    "type": "symfony-bundle",
+    "description": "Symfony2 StreamResponse Bundle",
+    "keywords": ["stream", "file", "StreamResponse"],
+    "homepage": "https://github.com/toretto460/Symfony2-StreamResponse",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "n3b",
+            "email": "mail@n3b.ru",
+            "homepage": "http://n3b.ru/"
+        },
+        {
+            "name": "Simone Di Maulo",
+            "homepage": "https://github.com/toretto460"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "autoload": {
+        "psr-0": { "n3b\\Bundle\\Util\\HttpFoundation\\StreamResponse": "" }
+    },
+    "target-dir": "n3b/Bundle/Util/HttpFoundation/StreamResponse"
+}

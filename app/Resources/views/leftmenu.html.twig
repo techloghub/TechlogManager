@@ -1,0 +1,19 @@
+<div class="vernav2 iconmenu">
+    <ul>
+        {% for one in left_menu %}
+            {% if one.firstMenu == 0 %}<li {% if current_firstMenu == one.id %}class="current"{% endif %}><a href="#{{ one.id }}" class="elements">{{ one.name }}</a><span class="arrow"></span>
+            <ul id="{{ one.id }}" style="display: block;">
+            {% for second in left_menu %}
+                {% if one.id == second.firstMenu and second.secondMenu == 0 %}
+                    {% if second.route is not empty %}<li {% if second.route == current_route %}class="current"{% endif %}><a href="{{ path(second.route) }}">{{ second.name }}</a><span class="arrow"></span></li>{% endif %}
+                {% endif %}
+            {% endfor %}
+            </ul>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <a class="togglemenu"></a>
+    <br /><br />
+</div>
+
+<!-- centercontent -->

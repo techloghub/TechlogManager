@@ -1,0 +1,62 @@
+<style>
+    td a {text-decoration:underline;color:blue;} /* 修改默认链接样式 */
+</style>
+<h4>总数：{{ total }}{% if totalmoney is defined %}<div style="margin-left:50px; display: inline">总资产：{{ totalmoney }}</div>{% endif %}</h4>
+<div class="gigantic pagination" style="float:right; margin:5px" >
+    <a href="#" class="first" data-action="first">&laquo;</a>
+    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+    <input type="text" readonly="readonly" data-max-page="40" />
+    <a href="#" class="next" data-action="next">&rsaquo;</a>
+    <a href="#" class="last" data-action="last">&raquo;</a>
+</div>
+<div style="float:right; margin:5px" >
+    <form>
+    <span class="field">
+        <label>每页显示：</label>
+        <input type="text" id="limit" name="limit" class="supperminiinput" value="{{ limit }}"/>（上限1000）
+    </span>
+    </form>
+</div>
+<p>&nbsp;</p>
+<form>
+    <table id="logo_table" cellpadding="0" cellspacing="0" border="0" class="stdtable">
+        <thead class="center">
+            <tr>
+                {% for key,value in key_value_map %}
+				<td width="{{ value['width'] }}%">{% if key != 'esid' %}<a href="javascript:void(0)" onclick="query_result('{{ key }}')">{% endif %}{{ value['name'] }}{% if key != 'esid' %}</a>{% endif %}</td>
+                {% endfor %}
+                <td width="5%">操作</td>
+            </tr>
+        </thead>
+        <tbody class="center">
+            {% for info in data %}
+            <tr>
+                {% for key,value in key_value_map %}
+                {% if key in select_list|keys and select_list[key][info[key]] is defined %}
+                <td>{{ select_list[key][info[key]] }}</td>
+                {% else %}
+				<td>{{ info[key] }}</td>
+                {% endif %}
+                {% endfor %}
+                <td>
+					{% for opt in operate %}
+					<a class="btnstyle" href="{{ opt['href'] }}{{ info['esid'] }}">{{ opt['text'] }}</a>
+					{% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+<div class="gigantic pagination">
+    <a href="#" class="first" data-action="first">&laquo;</a>
+    <a href="#" class="previous" data-action="previous">&lsaquo;</a>
+    <input type="text" readonly="readonly" data-max-page="40" />
+    <a href="#" class="next" data-action="next">&rsaquo;</a>
+    <a href="#" class="last" data-action="last">&raquo;</a>
+</div>
+<input type="hidden" id="totalPages" value="{{ totalPages }}"/>
+<input type="hidden" id="start" value="{{ start }}"/>
+<input type="hidden" id="asc" value="{{ asc }}"/>
+<input type="hidden" id="sortby" value="{{ sortby }}"/>

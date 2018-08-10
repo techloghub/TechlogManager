@@ -1,0 +1,33 @@
+parameters:
+    mailer_transport:  sendmail
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            zh_CN
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+    #域名
+    site.domain: techlog.cn
+    
+    #web path
+    web.path: "%kernel.root_dir%/../web"    
+    
+    #短信sdk的配置(开放平台的短信）
+    sdk_sms.id: "17"
+    sdk_sms.key: "rt9wa5ze"
+    
+    #导出的路径
+    data_exporter.out_dir: "%web.path%/export"
+    
+    #数据根目录
+    dir.data: "%kernel.root_dir%/Resources/data"
+    #缓存目录
+    dir.data.tmp: "%dir.data%/tmp"
+    
+    #php的执行文件
+    php.cmd: /usr/bin/env php
+
+    # 是否需要鉴权，默认为不需要鉴权（对于开发环境，不需要做鉴权，其他需要做鉴权）
+    env.auth: 1
+    

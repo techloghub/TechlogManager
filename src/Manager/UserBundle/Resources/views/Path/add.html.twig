@@ -1,0 +1,116 @@
+{% extends '::base.html.twig' %}
+{% block main %}
+<style type="text/css">
+    .content_title { font-weight: bold; }
+</style>
+
+<div class="centercontent">
+    <div class="pageheader notab">
+        <h1 class="pagetitle">路由管理</h1><br>
+        <span class="pagedesc" class="field"><a target="_blank" href="{{ path('user_path_list') }}" class="btn btn_link"><span>查询路由</span></a></span>
+        <span class="pagedesc" class="field"><a target="_blank" href="{{ path('user_path_add') }}" class="btn btn_link"><span>添加新路由</span></a></span>
+    </div>
+    <!--pageheader-->
+
+    <div id="contentwrapper" class="contentwrapper">
+        <form id="submitForm" class="stdform" action="" method="post">
+            <input type="hidden" id="entity_id" name="entity_id" value="{{ path.id }}"/>
+            <div>
+                <p>
+                    <label>名称</label>
+                    <span class="field">
+                        <input type="text" id="name" name="name" class="smallinput" value="{{ path.name }}"/>
+                        {% if path.id %}
+                            {% if path.firstMenu == 0 %}&nbsp;&nbsp;<strong style="color:red;">(一级菜单)</strong>
+                            {% elseif path.secondMenu == 0 %}&nbsp;&nbsp;<strong style="color:red;">(二级菜单)</strong>
+                            {% else %}&nbsp;&nbsp;<strong style="color:red;">(普通路由)</strong>
+                            {% endif %}
+                        {% endif %}
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>一级菜单</label>
+                    <span class="field">
+                        <select id="firstMenu" name="firstMenu" class="uniformselect">
+                            <option value="0">请选择</option>
+                            {% for one in menu %}
+                            {% if one.firstMenu == 0 %}<option value="{{ one.id }}" {% if path.firstMenu == one.id %}selected="selected"{% endif %}>{{ one.name}}</option>{% endif %}
+                            {% endfor %}
+                        </select><font style="color:red;">（备注：如果一级菜单为空，添加的是一级菜单！）</font>
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>二级菜单</label>
+                    <span class="field">
+                        <select id="secondMenu" name="secondMenu" class="uniformselect">
+                            <option value="0">请选择</option>
+                            {% for one in menu %}
+                            {% if path.firstMenu !=0 and path.firstMenu == one.firstMenu and one.secondMenu == 0 %}<option value="{{ one.id }}" {% if path.secondMenu == one.id %}selected="selected"{% endif %}>{{ one.name}}</option>{% endif %}
+                            {% endfor %}
+                        </select><font style="color:red;">（备注：如果选中了一级菜单，而二级菜单为空，添加的是一级菜单下的二级菜单！如果一、二级菜单都选中，那么添加的是普通路由，即Action）</font>
+                        <img id="loaders" src="/images/loaders/loader6.gif" alt="">
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>路由</label>
+                    <span class="field">
+                        <input type="text" id="route" name="route" class="smallinput" value="{{ path.route }}"/>
+                        <font style="color:red;">（备注：如果添加的是二级菜单！必须填写路由！否则不会显示！）</font>
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>备注</label>
+                    <span class="field">
+                        <input type="text" id="remark" name="remark" class="smallinput" value="{{ path.remark }}"/>
+                    </span>
+                </p>
+            </div>
+            {% if path.id %}
+                <div>
+                    <p>
+                        <label>操作人</label>
+                        <span class="field"><input type="text" id="operator" name="operator" class="smallinput" value="{{ path.operator }}" disabled="disabled"/></span>
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        <label>创建时间</label>
+                        <span class="field"><input type="text" id="createTime" name="createTime" class="smallinput" value="{{ path.createTime | date('Y-m-d H:i:s') }}" disabled="disabled"/></span>
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        <label>更新时间</label>
+                        <span class="field"><input type="text" id="updateTime" name="updateTime" class="smallinput" value="{{ path.updateTime | date('Y-m-d H:i:s') }}" disabled="disabled"/></span>
+                    </p>
+                </div>
+            {% endif %}
+            <div>
+                <p> 
+                    <label>操作</label>
+                    <button id="submitform_sub" type="submit" class="submit radius2">提交</button>
+                </p>
+            </div>
+        </form>
+        <br clear="all"><br>
+    </div><!--contentwrapper-->
+</div><!--centercontent-->
+
+<script type="text/javascript">
+    //需要传入下面js的变量定义
+    var GLOBAL_CONF = {
+        "action_add" : "{{ path('user_path_add') }}",
+        "action_menu" : "{{ path('user_path_menu') }}"
+    };
+</script>
+<script type="text/javascript" src="/bundles/manageruser/js/path/modify.js"></script>
+<script type="text/javascript" src="/bundles/manageruser/js/path/common.js"></script>
+{% endblock %}

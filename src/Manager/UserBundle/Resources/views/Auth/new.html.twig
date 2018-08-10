@@ -1,0 +1,53 @@
+{% extends '::base.html.twig' %}
+{% block main %}
+<style type="text/css">
+    .content_title { font-weight: bold; }
+</style>
+<div class="centercontent">
+    <div class="pageheader">
+        <h1 class="pagetitle">用户名管理</h1><br>
+    <ul class="hornav">
+        <li><a href="{{ path('user_auth_list') }}">用户列表</a></li>
+        <li class="current"><a href="{{ path('user_auth_new') }}">新建用户</a></li>
+    </ul>
+    </div>
+    <!--pageheader-->
+
+    <div id="contentwrapper" class="contentwrapper">
+        <p style="color:red;">*注意：1.用户名不能有空格。2.用户名无法更改。3.新建用户名如果没有配置任何权限将无法登录。</p>
+        <form id="submitForm" class="stdform" action="{{path('user_auth_add')}}" method="post">
+            <div>
+                <p>
+                    <label>用户名（不能有空格）</label>
+                    <span class="field">
+                        <input type="text" id="username" name="username" class="smallinput" value=""/>
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>邮箱</label>
+                    <span class="field">
+                        <input type="text" id="email" name="email" class="smallinput" value=""/>
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>密码</label>
+                    <span class="field">
+                        <input style="padding: 8px 5px;border: 1px solid #ccc;border-radius: 2px;background: #fcfcfc;color: #666;box-shadow: inset 0 1px 3px #ddd;" type="password" id="password" name="password" class="smallinput" value=""/>
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p> 
+                    <label></label>
+                    <button id="submitform_sub" type="submit" class="submit radius2">提交</button>
+                </p>
+            </div>
+        </form>
+        <br clear="all"><br>
+    </div><!--contentwrapper-->
+</div><!--centercontent-->
+{% endblock %}

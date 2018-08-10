@@ -1,0 +1,53 @@
+jms_security_extra:
+    secure_all_services: false
+    expressions: true
+
+security:
+    #encoders:
+    #    Symfony\Component\Security\Core\User\User: plaintext
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_ALLOWED_TO_SWITCH : ROLE_USER
+
+    providers:
+        manager_user:
+            entity:
+                class: Manager\UserBundle\Entity\User
+                property: username
+
+    #    in_memory:
+    #        memory:
+    #            users:
+    #                user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+    #                admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        login:
+            pattern:  ^/user/login$
+            security: false
+
+        secured_area:
+            pattern:    ^/(admin|user|app|tool|techlog_manager|charge)/
+            manager_user: ~
+            logout:
+                path:   user_logout
+                target: admin_root
+            #form_login:
+            #    check_path: _security_check
+            #    login_path: _demo_login
+            #anonymous: ~
+            #http_basic:
+            #    realm: "Secured Demo Area"
+
+    access_control:
+        - { path: ^/user/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/(admin|user|app|tool|techlog_manager|charge)/, role: ROLE_USER }
+
+    access_decision_manager:
+        # strategy can be: affirmative, unanimous or consensus
+        strategy: unanimous

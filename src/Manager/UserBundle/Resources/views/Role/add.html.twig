@@ -1,0 +1,124 @@
+{% extends '::base.html.twig' %}
+{% block main %}
+<style type="text/css">
+    .content_title { font-weight: bold; }
+</style>
+
+<div class="centercontent">
+    <div class="pageheader notab">
+        <h1 class="pagetitle">角色管理</h1><br>
+        <span class="pagedesc" class="field"><a target="_blank" href="{{ path('user_role_list') }}" class="btn btn_link"><span>查询角色</span></a></span>
+        <span class="pagedesc" class="field"><a target="_blank" href="{{ path('user_role_add') }}" class="btn btn_link"><span>添加新角色</span></a></span>
+    </div>
+    <!--pageheader-->
+
+    <div id="contentwrapper" class="contentwrapper">
+        <form id="submitForm" class="stdform" action="" method="post">
+            <div class="contenttitle2">
+                <h3>基本信息</h3>
+            </div>
+            <input type="hidden" id="entity_id" name="entity_id" value="{% if role is not empty %}{{ role.id }}{% endif %}"/>
+            <div>
+                <p>
+                    <label>名称</label>
+                    <span class="field">
+                        <input type="text" id="name" name="name" class="smallinput" value="{% if role is not empty %}{{ role.name }}{% endif %}"/>
+                    </span>
+                </p>
+            </div>
+            {% if role is not empty %}
+                <div>
+                    <p>
+                        <label>操作人</label>
+                        <span class="field"><input type="text" id="operator" name="operator" class="smallinput" value="{{ role.operator }}" disabled="disabled"/></span>
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        <label>创建时间</label>
+                        <span class="field"><input type="text" id="createTime" name="createTime" class="smallinput" value="{{ role.createTime | date('Y-m-d H:i:s') }}" disabled="disabled"/></span>
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        <label>更新时间</label>
+                        <span class="field"><input type="text" id="updateTime" name="updateTime" class="smallinput" value="{{ role.updateTime | date('Y-m-d H:i:s') }}" disabled="disabled"/></span>
+                    </p>
+                </div>
+            {% endif %}
+            <div>
+                <div class="contenttitle2">
+                    <h3>路由信息</h3>
+                </div>
+                <table id="snap_table" cellpadding="0" cellspacing="0" border="0" class="stdtable">
+                    <thead class="center">
+                        <tr>
+                            <td width="5%">序号</td>
+                            <td width="20%">一级菜单</td>
+                            <td width="20%">二级菜单</td>
+                            <td width="20%">路由</td>
+                        </tr>
+                    </thead>
+                    <tbody class="center">
+                    {% for one in firstMenuList %}
+                    <tr>
+                        <td class="img_seq">{{ loop.index }}</td>
+                        <td>
+                            <label for="menu_one_{{ one.id }}">
+                                <input type="checkbox" id="menu_one_{{ one.id }}" class="js-checkbox" name="route[]" value="{{ one.id }}" {% if role.route is defined %}{% if one.id in role.route %}checked="checked"{% endif %}{% endif %}/> {{ one.name }}
+                            </lable>
+                        </td>
+                        <td>
+                            <select id="menu_two_{{ one.id }}" class="js-select-mul" name="route[]" multiple="multiple" size="10" style="min-width:0;width:300px;">
+                                {% if secondMenuList is defined and secondMenuList is not null %}
+                                {% for key in secondMenuList|keys %}
+                                {% if one.id == key %}
+                                {% for i in secondMenuList[key].second %}
+                                <option value="{{ i.id }}" {% if role.route is defined %}{% if i.id in role.route %}selected="selected"{% endif %}{% endif %}>{{ i.name }}</option>
+                                {% endfor %}
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </select>
+                        </td>
+                        <td>
+                            <select id="menu_three_{{ one.id }}" class="js-select-mul" name="route[]" multiple="multiple" size="10" style="min-width:0;width:300px;">
+                                {% if thirdMenuList is defined and thirdMenuList is not null %}
+                                {% for key in thirdMenuList|keys %}
+                                {% if one.id == key %}
+                                {% for i in thirdMenuList[key].third %}
+                                <option value="{{ i.id }}" {% if role.route is defined %}{% if i.id in role.route %}selected="selected"{% endif %}{% endif %}>{{ i.name }}</option>
+                                {% endfor %}
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </select>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+            <div class="contenttitle2">
+                <h3>操作</h3>
+            </div>
+            <div>
+                <p> 
+                    <label>操作</label>
+                    <button id="submitform_sub" type="submit" class="submit radius2">提交</button>
+                </p>
+            </div>
+        </form>
+        <br clear="all"><br>
+    </div><!--contentwrapper-->
+</div><!--centercontent-->
+
+<script type="text/javascript">
+    //需要传入下面js的变量定义
+    var GLOBAL_CONF = {
+        "action_add" : "{{ path('user_role_add') }}",
+        "action_menu" : "{{ path('user_path_menu') }}"
+    };
+</script>
+<script type="text/javascript" src="/bundles/manageruser/js/role/modify.js"></script>
+{% endblock %}

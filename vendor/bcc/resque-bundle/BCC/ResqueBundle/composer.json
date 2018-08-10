@@ -1,0 +1,24 @@
+{
+    "name": "bcc/resque-bundle",
+    "type": "symfony-bundle",
+    "description": "BCCResqueBundle",
+    "keywords": ["resque job queue management"],
+    "homepage": "http://github.com/michelsalib/BCCResqueBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michel Salib",
+            "email": "michelsalib@hotmail.com",
+            "homepage": "http://michelsalib.com"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "<=2.2.x-dev",
+        "chrisboulton/php-resque": "1.2",
+        "chrisboulton/php-resque-scheduler": "1.1"
+    },
+    "autoload": {
+        "psr-0": { "BCC\\ResqueBundle": "" }
+    },
+    "target-dir": "BCC/ResqueBundle"
+}

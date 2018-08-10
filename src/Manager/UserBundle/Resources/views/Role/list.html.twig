@@ -1,0 +1,91 @@
+{% extends '::base.html.twig' %}
+{% block main %}
+<style type="text/css">
+    .content_title { font-weight: bold; }
+    .uushine {background-color: #78B270;border: 1px solid #71AD69;color: #FFFFFF;height: 30px;line-height: 30px;padding: 10px;}
+</style>
+<div class="centercontent">
+    <div class="pageheader notab">
+        <h1 class="pagetitle">角色管理</h1><br>
+        <span class="pagedesc" class="field"><a href="{{ path('user_role_list') }}" class="btn btn_link"><span>查询角色</span></a></span>
+        <span class="pagedesc" class="field"><a target="_blank" href="{{ path('user_role_add') }}" class="btn btn_link"><span>添加新角色</span></a></span>
+    </div>
+    <!--pageheader-->
+    <div id="contentwrapper" class="contentwrapper">
+        <form id="queryform" class="stdform_q" action="" method="post">
+            <div>
+                <p>
+                    <label>一级菜单</label>
+                    <span class="field">
+                        <select id="firstMenu" name="firstMenu" class="uniformselect">
+                            <option value="0">请选择</option>
+                            {% for one in firstMenu %}
+                            {% if one.firstMenu ==0 %}<option value="{{ one.id }}">{{ one.name }}</option>{% endif %}
+                            {% endfor %}
+                        </select>
+                    </span>
+                </p>
+                <p>
+                    <label>二级菜单</label>
+                    <span class="field">
+                        <select id="secondMenu" name="secondMenu" class="uniformselect">
+                            <option value="0">请选择</option>
+                        </select>
+                        <img id="loaders" src="/images/loaders/loader6.gif" alt="">
+                    </span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>角色名称</label>
+                    <span class="field"><input type="text" id="name" name="name" class="smallinput" value=""/></span>
+                </p>
+            </div>
+            {#
+            <div>
+                <p>
+                    <label>操作时间</label>
+                    <span class="field">
+                        <input type="text" id="startTime" name="startTime" class="smallinput" value=""/> ~ 
+                        <input type="text" id="endTime" name="endTime" class="smallinput" value=""/>
+                    </span>
+                </p>
+            </div>
+            #}
+            <div>
+                <p>
+                    <label>操作人</label>
+                    <span class="field"><input type="text" id="operator" name="operator" class="smallinput" value=""/></span>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>操作</label>
+                    <span class="field"><button id="queryform_sub" class="submit radius2">查询</button></span>
+                </p>
+            </div>
+        </form>
+        <div class="contenttitle2">
+            <h3>列表结果</h3>
+        </div>
+        <div id="query_result">
+            {% include 'ManagerUserBundle:Role:query_result.html.twig' %}
+        </div>
+        <img id="loaders_result" src="/images/loaders/loader6.gif" alt="">
+        <div clear="all"></div>
+    </div>
+    <!--contentwrapper-->
+</div>
+<!--centercontent-->
+
+<script type="text/javascript">
+    //需要传入下面js的变量定义
+    var GLOBAL_CONF = {
+        "action_delete" : "{{ path('user_role_delete') }}",
+        "action_query" : "{{ path('user_role_query') }}",
+        "action_menu" : "{{ path('user_path_menu') }}",
+    };
+</script>
+<script type="text/javascript" src="/bundles/manageruser/js/role/list.js"></script>
+<script type="text/javascript" src="/bundles/manageruser/js/path/common.js"></script>
+{% endblock %}
