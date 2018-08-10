@@ -10,35 +10,31 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Manager\TechlogBundle\Entity\Article;
+use Manager\TechlogBundle\Entity\TaskList;
 
 /**
- * @Route("/article")
+ * @Route("/tasklist")
  */
-class ArticleController extends Controller
+class TaskListController extends Controller
 {
-    private $input_list = array('article_id', 'title');
-    private $range_list = array('access_count', 'inserttime', 'updatetime');
+    private $input_list = array('id', 'name');
+    private $range_list = array('insert_time', 'update_time', 'finish_time');
 	private $select_list = array(
-		'category_id' => array(1=>'龙潭书斋', 2=>'读书笔记', 3=>'龙渊阁记',
-			4=>'技术分享', 5=>'龙泉日记', 6=>'龙泉财报', 7=>'文档归档'),
-		'online' => array(0 => '下线', 1 => '上线'),
+		'status' => array(0 => '未开始', 1 => '进行中', 2 => '已完成', 3 => '已取消'),
 	);
     private $key_value_map = array(
-		'article_id'	=> array('name'=>'id', 'width'=>3),
-		'online'		=> array('name'=>'上线', 'width'=>2),
-		'title'			=> array('name'=>'标题', 'width'=>12),
-		'category_id'	=> array('name'=>'分类', 'width'=>4),
-		'access_count'	=> array('name'=>'访问数', 'width'=>3),
-		'comment_count'	=> array('name'=>'评论数', 'width'=>3),
-		'title_desc'	=> array('name'=>'备注', 'width'=>5),
-		'updatetime'	=> array('name'=>'更新时间', 'width'=>5),
-		'inserttime'	=> array('name'=>'插入时间', 'width'=>5),
+		'id'			=> array('name'=>'id', 'width'=>2),
+		'name'			=> array('name'=>'名称', 'width'=>8),
+		'insert_time'	=> array('name'=>'创建时间', 'width'=>5),
+		'update_time'	=> array('name'=>'更新时间', 'width'=>5),
+		'finish_time'	=> array('name'=>'完成时间', 'width'=>5),
+		'status'		=> array('name'=>'状态', 'width'=>2),
+		'remark'		=> array('name'=>'备注', 'width'=>8),
     );
 
     /**
-     * @Route("/list", name="techlog_manager_article_list");
-	 * @Template("ManagerTechlogBundle:Article:list.html.twig")
+     * @Route("/list", name="techlog_manager_tasklist_list");
+	 * @Template("ManagerTechlogBundle:TaskList:list.html.twig")
      */
     public function listAction (Request $request)
     {
@@ -46,8 +42,8 @@ class ArticleController extends Controller
 	}
 
     /**
-     * @Route("/query", name="techlog_manager_article_query")
-	 * @Template("ManagerTechlogBundle:Article:query_result.html.twig")
+     * @Route("/query", name="techlog_manager_tasklist_query")
+	 * @Template("ManagerTechlogBundle:TaskList:query_result.html.twig")
      */
     public function queryAction(Request $request)
     {
@@ -55,19 +51,22 @@ class ArticleController extends Controller
     }
 
     /**
-     * @Route("/modify", name="techlog_manager_article_modify");
-	 * @Template("ManagerTechlogBundle:Article:modify.html.twig")
+     * @Route("/modify", name="techlog_manager_tasklist_modify");
+	 * @Template("ManagerTechlogBundle:TaskList:modify.html.twig")
      */
     public function modifyAction (Request $request)
 	{
-        if (!$request->get('article_id'))
-            throw new \Exception('id is missing');
-        $id = $request->get('article_id');
+        $id = $request->get('id');
 
-        $em = $this->getDoctrine()->getEntityManager();
-		$entity = $em->getRepository('ManagerTechlogBundle:Article')->findOneByArticleId($id);
-        if (empty($entity))
-            throw new \Exception('id is wrong');
+		if (!empty($id)) {
+			$em = $this->getDoctrine()->getEntityManager();
+			$entity = $em->getRepository('ManagerTechlogBundle:TaskList')->findOneById($id);
+			if (empty($entity))
+				throw new \Exception('id is wrong');
+		} else {
+			$entity = new TaskList();
+			$entity->setStatus(0);
+		}
 
 		return array(
 			'data'=>$entity,
@@ -76,31 +75,52 @@ class ArticleController extends Controller
 	}
 
     /**
-     * @Route("/modifybasic", name="techlog_manager_article_modifybasic");
+     * @Route("/modifybasic", name="techlog_manager_tasklist_modifybasic");
      */
     public function modifybasicAction (Request $request)
 	{
     	\date_default_timezone_set('PRC');
 
-		$id = $request->get('article_id');
-		if (empty($id))
-			return new JsonResponse(array('code'=>1, 'msg'=>'id is missing'));
+		$id = $request->get('id');
+		$date = date('Y-m-d H:i:s');
+		$em = $this->getDoctrine()->getEntityManager();
+		if (!empty($id)) {
+			$status = $request->get('status');
+			if (!in_array($status, range(0, 3))) {
+				return new JsonResponse(array('code'=>1, 'msg'=>'状态值错误'));
+			}
 
-        $em = $this->getDoctrine()->getEntityManager();
-		$entity = $em->getRepository('ManagerTechlogBundle:Article')->findOneByArticleId($id);
-        if (empty($entity))
-			return new JsonResponse(array('code'=>1, 'msg'=>'id is wrong'));
+			$entity = $em->getRepository('ManagerTechlogBundle:TaskList')->findOneById($id);
+			if (empty($entity)) {
+				return new JsonResponse(array('code'=>1, 'msg'=>'id is wrong'));
+			}
 
-		$entity->setTitle($request->get('title'));
-		$entity->setOnline($request->get('online'));
-		$entity->setCategoryId($request->get('category_id'));
-		$entity->setTitleDesc($request->get('title_desc'));
-		$entity->setUpdatetime(date('Y-m-d H:i:s'));
+			if ($status > $entity->getStatus()) {
+				$entity->setStatus($request->get('status'));
+				if ($status >= 2) {
+					$entity->setFinishTime($date);
+				}
+			} else if ($entity->getStatus() > $status) {
+				return new JsonResponse(array('code'=>1, 'msg'=>'status is wrong'));
+			} else {
+				$entity->setName($request->get('name'));
+				$entity->setRemark($request->get('remark'));
+			}
+		} else {
+			$entity = new TaskList();
+			$entity->setInsertTime($date);
+			$entity->setStatus(0);
+			$entity->setFinishTime('0000-00-00 00:00:00');
+			$entity->setName($request->get('name'));
+			$entity->setRemark($request->get('remark'));
+		}
+
+		$entity->setUpdateTime($date);
 		$em->persist($entity);
 		$em->flush();
 
 		return new JsonResponse(array('code'=>0, 'msg'=>'更新成功',
-			'url'=>$this->generateUrl('techlog_manager_article_list').'?article_id='.$id));
+			'url'=>$this->generateUrl('techlog_manager_tasklist_list').'?id='.$id));
 	}
 
     private function getQueryParams($request)
@@ -114,7 +134,7 @@ class ArticleController extends Controller
 			$params['root'] = 1;
 		
         if (!isset($params['sortby']))
-            $params['sortby'] = 'article_id';
+            $params['sortby'] = 'id';
         if (!isset($params['asc']))
             $params['asc'] = '1';
 
@@ -127,7 +147,7 @@ class ArticleController extends Controller
         $repository_key = $this->get_repository_key();
 
         $em = $this->getDoctrine()->getEntityManager();
-		list($total, $data) = $em->getRepository('ManagerTechlogBundle:Article')->getList($start, $limit, $params, $repository_key);
+		list($total, $data) = $em->getRepository('ManagerTechlogBundle:TaskList')->getList($start, $limit, $params, $repository_key);
 
         $totalPages = (int)(($total + $limit - 1) / $limit);
 
@@ -151,8 +171,8 @@ class ArticleController extends Controller
     private function get_repository_key()
     {
         $repository_key = array();
-        $repository_key['like_list'] = array_diff($this->input_list, array('article_id'));
-        $repository_key['equal_list'] = array_merge(array_keys($this->select_list), array('article_id'));
+        $repository_key['like_list'] = array_diff($this->input_list, array('id'));
+        $repository_key['equal_list'] = array_merge(array_keys($this->select_list), array('id'));
         $repository_key['range_list'] = $this->range_list;
 
         return $repository_key;
@@ -182,4 +202,3 @@ class ArticleController extends Controller
         return $param;
     }
 }
-?>

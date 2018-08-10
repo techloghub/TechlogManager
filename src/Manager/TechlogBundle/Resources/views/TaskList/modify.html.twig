@@ -1,0 +1,115 @@
+{% extends '::base.html.twig' %} {% block main %}
+<script type="text/javascript">
+    document.title = '任务修改';
+</script>
+
+<style type="text/css">
+    .content_title { font-weight: bold; }
+    #logo_table .extra { display: none; }
+    td a {text-decoration:underline;color:blue;} /* 修改默认链接样式 */
+</style>
+
+<div class="centercontent">
+    <div class="pageheader">
+		{% if data.id != "" %}
+        <h1 class="pagetitle">任务修改</h1>
+		{% else %}
+        <h1 class="pagetitle">新建任务</h1>
+		{% endif %}
+        <ul class="hornav">
+            <li><a href="{{ path('techlog_manager_tasklist_list') }}">任务管理</a></li>
+			<li class="current"><a href="{{ path('techlog_manager_tasklist_modify', {'id':data.id}) }}">{% if data.id != "" %}任务修改{% else %}新建任务{% endif %}</a></li>
+        </ul>
+    </div>
+
+    <form id="modifyform" name="modifyform" class="stdform_q" method="post">
+        <div style="margin-top:40px;">
+            <p>
+                <label>ID</label>
+				<span class="field"><input type="text" id="id" name="id" class="smallinput" value="{% if data is defined %}{{ data.id }}{% endif %}" readonly="readonly" /></span>
+            </p>
+        </div>
+        <div>
+            <p>
+                <label>任务名称</label>
+                <span class="field"><input type="text" id="name" name="name" class="smallinput" value="{{ data.name }}"/></span>
+            </p>
+        </div>
+		<div>
+			<p>
+				<label>状态</label>
+				<span class="field"><input type="text" id="status" name="status" class="smallinput" value="{{ select_list['status'][data.status] }}" key="{{ data.status }}" readonly="readonly" /></span>
+			</p>
+		</div>
+        <div>
+            <p>
+                <label>备注</label>
+                <span class="field"><input type="text" id="remark" name="remark" class="smallinput" value="{{ data.remark }}"/></span>
+            </p>
+        </div>
+		<div>
+			<p>
+				<label>操作</label>
+				<span class="field">
+				<button type="button" onclick="confirm_submit()">提交</button>
+				</span>
+			</p>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+function confirm_submit() {
+	var id = $('#id').val();
+	var name = $('#name').val();
+	var remark = $('#remark').val();
+	var status = $('#status').attr('key');
+
+	if (name == "") {
+		jAlert('请输入任务名称', '提示');
+		return false;
+	}
+
+    jConfirm
+	(
+	 	"请确认是否提交？",
+		"提示",
+		function(r)
+		{
+			if(r)
+			{
+				$.ajax
+				(
+					{
+						'url'	: "{{ path('techlog_manager_tasklist_modifybasic') }}",
+						'type'	: 'post',
+						'data'	: {'id':id, 'name':name, 'remark':remark, 'status':status},
+                        'dataType' : 'json',
+                        "error" : function (jqXHR, textStatus, errorThrown) 
+                        {
+                            var errMsg = errorThrown == 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!"; jAlert(errMsg, "提示");
+                        },
+                        "success" : function (data) 
+                        {
+                            if (data['code'] != 0) 
+                            {
+                                jAlert("error: " + data['msg']);
+                            }
+                            else
+                            {
+                                jAlert(data['msg'], "提示", function()
+                                    {
+                                        window.location.href=data['url'];
+                                    }
+                                );
+                            }
+                        }
+					}
+				);
+			}
+    	}
+	);
+    return false;
+}
+</script>
+{% endblock %}

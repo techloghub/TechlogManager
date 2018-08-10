@@ -4,6 +4,14 @@ $(document).ready(function() {
         timeFormat: 'HH:mm:ss',
         showSecond: true
     };
+    $('#start_insert_time').datetimepicker(datetimeConfig);
+    $('#end_insert_time').datetimepicker(datetimeConfig);
+    $('#start_update_time').datetimepicker(datetimeConfig);
+    $('#end_update_time').datetimepicker(datetimeConfig);
+    $('#start_finish_time').datetimepicker(datetimeConfig);
+    $('#end_finish_time').datetimepicker(datetimeConfig);
+    $('#start_date').datetimepicker(datetimeConfig);
+    $('#end_date').datetimepicker(datetimeConfig);
     $('#start_inserttime').datetimepicker(datetimeConfig);
     $('#end_inserttime').datetimepicker(datetimeConfig);
     $('#start_updatetime').datetimepicker(datetimeConfig);

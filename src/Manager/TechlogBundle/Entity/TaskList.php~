@@ -1,0 +1,67 @@
+<?php
+
+namespace Manager\TechlogBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * TaskList
+ *
+ * @ORM\Table(name="task_list")
+ * @ORM\Entity(repositoryClass="Manager\TechlogBundle\Repository\TaskListRepository")
+ */
+class TaskList
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=64, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string 
+     *
+     * @ORM\Column(name="insert_time", type="string", nullable=false)
+     */
+    private $insertTime;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="update_time", type="string", nullable=false)
+     */
+    private $updateTime;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="finish_time", type="string", nullable=false)
+     */
+    private $finishTime;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer", nullable=false)
+     */
+    private $status;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remark", type="string", length=256, nullable=false)
+     */
+    private $remark;
+
+
+}

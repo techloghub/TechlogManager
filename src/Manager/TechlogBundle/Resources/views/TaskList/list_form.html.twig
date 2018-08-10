@@ -1,0 +1,45 @@
+<form id="queryform" class="stdform_q" action="" method="post">
+    <div>
+    {% for value in input_list %}
+        <p>
+        <label>{{ key_value_map[value]['name'] }}</label>
+        <span class="field">
+            <input type="text" id="{{ value }}" name="{{ value }}" class="smallinput" value="{% if params[value] is defined %}{{ params[value] }}{% endif %}"/>
+        </span>
+        </p>
+    {% endfor %}
+    </div>
+    <div>
+    {% for value in range_list %}
+        <p>
+        <label>{{ key_value_map[value]['name'] }}</label>
+        <span class="field">
+            <input type="text" id="start_{{ value }}" name="start_{{ value }}" class="miniinput" value=""/> ~
+            <input type="text" id="end_{{ value }}" name="end_{{ value }}" class="miniinput" value=""/>
+        </span>
+        </p>
+    {% endfor %}
+    </div>
+    <div>
+    {% for key,value in select_list %}
+        <p>
+        <label>{{ key_value_map[key]['name'] }}</label>
+        <span class="field">
+            <select id="{{ key }}" class="uniformselect" name="{{ key }}">
+                <option value="">全部</option>
+                {% for k in select_list[key]|keys %}
+                <option value="{{ k }}" {% if params[key] is defined and k == params[key] %}selected="selected"{% endif %}>{{ select_list[key][k] }}</option>
+                {% endfor %}
+            </select>
+        </span>
+        </p>
+    {% endfor %}
+    </div>
+    <div>
+        <p>
+        <label>操作</label>
+        <span class="field"><button id="queryform_sub" class="submit radius2">查询</button></span>
+		<span class="field"><a class="btnstyle" style="margin-right:5px" href="{{ path('techlog_manager_tasklist_modify') }}">新建任务</a></span>
+        </p>
+    </div>
+</form>
