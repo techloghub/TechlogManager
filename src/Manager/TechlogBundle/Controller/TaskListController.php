@@ -134,7 +134,7 @@ class TaskListController extends Controller
 			$params['root'] = 1;
 		
         if (!isset($params['sortby']))
-            $params['sortby'] = 'id';
+            $params['sortby'] = 'status';
         if (!isset($params['asc']))
             $params['asc'] = '1';
 

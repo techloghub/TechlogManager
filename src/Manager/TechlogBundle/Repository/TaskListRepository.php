@@ -25,18 +25,12 @@ class TaskListRepository extends EntityRepository
 
         $total_sql = 'select count(*) as total from task_list where 1';
         $data_sql = 'select '.implode(', ', $space).' from task_list where 1';
-		if (!isset($params['root']) || $params['root'] !== 1)
-		{
-			$total_sql .= ' and category_id < 5';
-			$data_sql .= ' and category_id < 5';
-		}
         list($where_sql, $pkv) = $this->get_where_sql($params, $params_key);
 
-        if (isset($params['sortby']))
-        {
-            $where_sql .= ' order by '.$params['sortby'];
-            if (!isset($params['asc']) || $params['asc'] != 1)
-                $where_sql .= ' desc';
+        if (isset($params['sortby'])) {
+			$where_sql .= ' order by '.$params['sortby'];
+			if (!isset($params['asc']) || $params['asc'] != 1)
+				$where_sql .= ' desc';
 		}
 
         $total_sql .= $where_sql;
