@@ -29,7 +29,7 @@ class TaskList
     private $name;
 
     /**
-     * @var string 
+     * @var string
      *
      * @ORM\Column(name="insert_time", type="string", nullable=false)
      */
@@ -62,6 +62,20 @@ class TaskList
      * @ORM\Column(name="remark", type="string", length=256, nullable=false)
      */
     private $remark;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="category", type="integer", nullable=false)
+     */
+    private $category;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="priority", type="integer", nullable=false)
+     */
+    private $priority;
 
 
 
@@ -114,7 +128,7 @@ class TaskList
     /**
      * Get insertTime
      *
-     * @return string 
+     * @return string
      */
     public function getInsertTime()
     {
@@ -137,7 +151,7 @@ class TaskList
     /**
      * Get updateTime
      *
-     * @return string 
+     * @return string
      */
     public function getUpdateTime()
     {
@@ -160,7 +174,7 @@ class TaskList
     /**
      * Get finishTime
      *
-     * @return string 
+     * @return string
      */
     public function getFinishTime()
     {
@@ -211,5 +225,51 @@ class TaskList
     public function getRemark()
     {
         return $this->remark;
+    }
+
+    /**
+     * Set category
+     *
+     * @param integer $category
+     * @return TaskList
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return integer 
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set priority
+     *
+     * @param integer $priority
+     * @return TaskList
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+    
+        return $this;
+    }
+
+    /**
+     * Get priority
+     *
+     * @return integer 
+     */
+    public function getPriority()
+    {
+        return $this->priority;
     }
 }
