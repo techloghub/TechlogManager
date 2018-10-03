@@ -18,15 +18,21 @@ use Manager\TechlogBundle\Entity\TaskList;
 class TaskListController extends Controller
 {
     private $input_list = array('id', 'name');
-    private $range_list = array('insert_time', 'update_time', 'finish_time');
+    private $range_list = array('insert_time', 'finish_time', 'start_time');
 	private $select_list = array(
 		'status' => array(0 => '未开始', 1 => '进行中', 2 => '已完成', 3 => '已取消'),
+		'priority' => array(4 => '立即去做', 3 => '非常紧急', 2 => '非常重要',
+			1 => '比较重要', 0 => '随时都行'),
+		'category' => array(0 => '技术', 1 => '工作', 2 => '生活', 3 => '读书')
 	);
     private $key_value_map = array(
 		'id'			=> array('name'=>'id', 'width'=>2),
 		'name'			=> array('name'=>'名称', 'width'=>8),
+		'category'		=> array('name'=>'分类', 'width'=>2),
+		'priority'		=> array('name'=>'优先级', 'width'=>2),
 		'insert_time'	=> array('name'=>'创建时间', 'width'=>5),
-		'update_time'	=> array('name'=>'更新时间', 'width'=>5),
+		'start_time'	=> array('name'=>'开始时间', 'width'=>5),
+		#'update_time'	=> array('name'=>'更新时间', 'width'=>5),
 		'finish_time'	=> array('name'=>'完成时间', 'width'=>5),
 		'status'		=> array('name'=>'状态', 'width'=>2),
 		'remark'		=> array('name'=>'备注', 'width'=>8),
@@ -97,6 +103,9 @@ class TaskListController extends Controller
 
 			if ($status > $entity->getStatus()) {
 				$entity->setStatus($request->get('status'));
+				if ($status == 1) {
+					$entity->setStartTime($date);
+				}
 				if ($status >= 2) {
 					$entity->setFinishTime($date);
 				}
@@ -105,6 +114,8 @@ class TaskListController extends Controller
 			} else {
 				$entity->setName($request->get('name'));
 				$entity->setRemark($request->get('remark'));
+				$entity->setPriority($request->get('priority'));
+				$entity->setCategory($request->get('category'));
 			}
 		} else {
 			$entity = new TaskList();
@@ -113,6 +124,8 @@ class TaskListController extends Controller
 			$entity->setFinishTime('0000-00-00 00:00:00');
 			$entity->setName($request->get('name'));
 			$entity->setRemark($request->get('remark'));
+			$entity->setPriority($request->get('priority'));
+			$entity->setCategory($request->get('category'));
 		}
 
 		$entity->setUpdateTime($date);
@@ -148,6 +161,19 @@ class TaskListController extends Controller
 
         $em = $this->getDoctrine()->getEntityManager();
 		list($total, $data) = $em->getRepository('ManagerTechlogBundle:TaskList')->getList($start, $limit, $params, $repository_key);
+		if (!empty($data)) {
+			for ($i = 0; $i < sizeof($data); ++$i) {
+				$entity = $data[$i];
+				if ($entity['start_time'] === '0000-00-00 00:00:00') {
+					$entity['start_time'] = '';
+					$data[$i] = $entity;
+				}
+				if ($entity['finish_time'] === '0000-00-00 00:00:00') {
+					$entity['finish_time'] = '';
+					$data[$i] = $entity;
+				}
+			}
+		}
 
         $totalPages = (int)(($total + $limit - 1) / $limit);
 

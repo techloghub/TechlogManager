@@ -37,6 +37,30 @@
         </div>
 		<div>
 			<p>
+				<label>所属分类</label>
+				<span class="field">
+                <select id="category" class="uniformselect" name="category">
+					{% for key,value in select_list['category'] %}
+					<option value="{{ key }}" {% if data.category == key %}selected="selected"{% endif %}>{{ value }}</option>
+					{% endfor %}
+				</select>
+				</span>
+			</p>
+		</div>
+		<div>
+			<p>
+				<label>优先级</label>
+				<span class="field">
+                <select id="priority" class="uniformselect" name="priority">
+					{% for key,value in select_list['priority'] %}
+					<option value="{{ key }}" {% if data.priority == key %}selected="selected"{% endif %}>{{ value }}</option>
+					{% endfor %}
+				</select>
+				</span>
+			</p>
+		</div>
+		<div>
+			<p>
 				<label>状态</label>
 				<span class="field"><input type="text" id="status" name="status" class="smallinput" value="{{ select_list['status'][data.status] }}" key="{{ data.status }}" readonly="readonly" /></span>
 			</p>
@@ -63,6 +87,8 @@ function confirm_submit() {
 	var id = $('#id').val();
 	var name = $('#name').val();
 	var remark = $('#remark').val();
+	var category = $('#category').val();
+	var priority = $('#priority').val();
 	var status = $('#status').attr('key');
 
 	if (name == "") {
@@ -83,7 +109,8 @@ function confirm_submit() {
 					{
 						'url'	: "{{ path('techlog_manager_tasklist_modifybasic') }}",
 						'type'	: 'post',
-						'data'	: {'id':id, 'name':name, 'remark':remark, 'status':status},
+						'data'	: {'id':id, 'name':name, 'remark':remark, 'status':status,
+							'category' : category, 'priority' : priority},
                         'dataType' : 'json',
                         "error" : function (jqXHR, textStatus, errorThrown) 
                         {

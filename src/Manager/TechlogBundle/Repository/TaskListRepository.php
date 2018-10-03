@@ -20,8 +20,8 @@ class TaskListRepository extends EntityRepository
 
         $conn = $this->getConn();
 
-		$space = array('id', 'name', 'status', 'insert_time', 'update_time',
-			'finish_time', 'remark');
+		$space = array('id', 'name', 'priority', 'category', 'status',
+			'insert_time', 'start_time', 'update_time', 'finish_time', 'remark');
 
         $total_sql = 'select count(*) as total from task_list where 1';
         $data_sql = 'select '.implode(', ', $space).' from task_list where 1';
@@ -31,6 +31,7 @@ class TaskListRepository extends EntityRepository
 			$where_sql .= ' order by '.$params['sortby'];
 			if (!isset($params['asc']) || $params['asc'] != 1)
 				$where_sql .= ' desc';
+			$where_sql .= ', priority desc';
 		}
 
         $total_sql .= $where_sql;

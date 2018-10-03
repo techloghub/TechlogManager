@@ -43,7 +43,7 @@ class TaskList
     private $updateTime;
 
     /**
-     * @var string
+     * @var string 
      *
      * @ORM\Column(name="finish_time", type="string", nullable=false)
      */
@@ -76,6 +76,13 @@ class TaskList
      * @ORM\Column(name="priority", type="integer", nullable=false)
      */
     private $priority;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="start_time", type="string", nullable=false)
+     */
+    private $startTime;
 
 
 
@@ -128,7 +135,7 @@ class TaskList
     /**
      * Get insertTime
      *
-     * @return string
+     * @return string 
      */
     public function getInsertTime()
     {
@@ -151,7 +158,7 @@ class TaskList
     /**
      * Get updateTime
      *
-     * @return string
+     * @return string 
      */
     public function getUpdateTime()
     {
@@ -174,7 +181,7 @@ class TaskList
     /**
      * Get finishTime
      *
-     * @return string
+     * @return string 
      */
     public function getFinishTime()
     {
@@ -271,5 +278,28 @@ class TaskList
     public function getPriority()
     {
         return $this->priority;
+    }
+
+    /**
+     * Set startTime
+     *
+     * @param string $startTime
+     * @return TaskList
+     */
+    public function setStartTime($startTime)
+    {
+        $this->startTime = $startTime;
+    
+        return $this;
+    }
+
+    /**
+     * Get startTime
+     *
+     * @return string 
+     */
+    public function getStartTime()
+    {
+        return $this->startTime;
     }
 }
