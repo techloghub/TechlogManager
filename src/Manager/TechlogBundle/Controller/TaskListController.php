@@ -103,7 +103,7 @@ class TaskListController extends Controller
 
 			if ($status > $entity->getStatus()) {
 				$entity->setStatus($status);
-				if ($status === 1) {
+				if ($status == 1) {
 					$entity->setStartTime($date);
 				}
 				if ($status >= 2) {
