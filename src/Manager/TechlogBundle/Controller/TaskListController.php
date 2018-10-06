@@ -102,8 +102,8 @@ class TaskListController extends Controller
 			}
 
 			if ($status > $entity->getStatus()) {
-				$entity->setStatus($request->get('status'));
-				if ($status == 1) {
+				$entity->setStatus($status);
+				if ($status === 1) {
 					$entity->setStartTime($date);
 				}
 				if ($status >= 2) {
@@ -122,6 +122,7 @@ class TaskListController extends Controller
 			$entity->setInsertTime($date);
 			$entity->setStatus(0);
 			$entity->setFinishTime('0000-00-00 00:00:00');
+			$entity->setStartTime('0000-00-00 00:00:00');
 			$entity->setName($request->get('name'));
 			$entity->setRemark($request->get('remark'));
 			$entity->setPriority($request->get('priority'));
