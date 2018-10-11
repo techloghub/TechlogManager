@@ -32,6 +32,8 @@ class TaskListRepository extends EntityRepository
 			if (!isset($params['asc']) || $params['asc'] != 1)
 				$where_sql .= ' desc';
 			$where_sql .= ', priority desc';
+		} else {
+			$where_sql .= ' order by priority desc';
 		}
 
         $total_sql .= $where_sql;

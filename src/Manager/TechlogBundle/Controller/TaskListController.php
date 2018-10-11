@@ -21,8 +21,8 @@ class TaskListController extends Controller
     private $range_list = array('insert_time', 'finish_time', 'start_time');
 	private $select_list = array(
 		'status' => array(0 => '未开始', 1 => '进行中', 2 => '已完成', 3 => '已取消'),
-		'priority' => array(4 => '立即去做', 3 => '非常紧急', 2 => '非常重要',
-			1 => '比较重要', 0 => '随时都行'),
+		'priority' => array(5 => '立即去做', 4 => '非常紧急', 3 => '非常重要',
+			2 => '比较重要', 1 => '随时都行', 0 => '已完成', ),
 		'category' => array(0 => '技术', 1 => '工作', 2 => '生活', 3 => '读书')
 	);
     private $key_value_map = array(
@@ -108,6 +108,7 @@ class TaskListController extends Controller
 				}
 				if ($status >= 2) {
 					$entity->setFinishTime($date);
+					$entity->setPriority(0);
 				}
 			} else if ($entity->getStatus() > $status) {
 				return new JsonResponse(array('code'=>1, 'msg'=>'status is wrong'));
@@ -147,11 +148,6 @@ class TaskListController extends Controller
 		else
 			$params['root'] = 1;
 		
-        if (!isset($params['sortby']))
-            $params['sortby'] = 'status';
-        if (!isset($params['asc']))
-            $params['asc'] = '1';
-
         $start = (int)$request->get("start");
         $limit = (int)$request->get("limit");
 
