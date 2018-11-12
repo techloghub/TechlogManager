@@ -1,0 +1,109 @@
+<?php
+
+namespace Manager\TechlogBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * CalendarAlert
+ *
+ * @ORM\Table(name="calendar_alert")
+ * @ORM\Entity
+ */
+class CalendarAlert
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=64, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="insert_time", type="datetime", nullable=false)
+     */
+    private $insertTime;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="update_time", type="datetime", nullable=false)
+     */
+    private $updateTime;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="start_time", type="datetime", nullable=false)
+     */
+    private $startTime;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="end_time", type="datetime", nullable=false)
+     */
+    private $endTime;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="alert_time", type="datetime", nullable=false)
+     */
+    private $alertTime;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer", nullable=false)
+     */
+    private $status;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="lunar", type="integer", nullable=false)
+     */
+    private $lunar;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="cycle_type", type="integer", nullable=false)
+     */
+    private $cycleType;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="period", type="integer", nullable=false)
+     */
+    private $period;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="category", type="integer", nullable=false)
+     */
+    private $category;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remark", type="string", length=2048, nullable=false)
+     */
+    private $remark;
+
+
+}
