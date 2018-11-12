@@ -29,37 +29,37 @@ class CalendarAlert
     private $name;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="insert_time", type="datetime", nullable=false)
+     * @ORM\Column(name="insert_time", type="string", nullable=false)
      */
     private $insertTime;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="update_time", type="datetime", nullable=false)
+     * @ORM\Column(name="update_time", type="string", nullable=false)
      */
     private $updateTime;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="start_time", type="datetime", nullable=false)
+     * @ORM\Column(name="start_time", type="string", nullable=false)
      */
     private $startTime;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="end_time", type="datetime", nullable=false)
+     * @ORM\Column(name="end_time", type="string", nullable=false)
      */
     private $endTime;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="alert_time", type="datetime", nullable=false)
+     * @ORM\Column(name="alert_time", type="string", nullable=false)
      */
     private $alertTime;
 
@@ -143,7 +143,7 @@ class CalendarAlert
     /**
      * Set insertTime
      *
-     * @param \DateTime $insertTime
+     * @param string $insertTime
      * @return CalendarAlert
      */
     public function setInsertTime($insertTime)
@@ -156,7 +156,7 @@ class CalendarAlert
     /**
      * Get insertTime
      *
-     * @return \DateTime 
+     * @return string 
      */
     public function getInsertTime()
     {
@@ -166,7 +166,7 @@ class CalendarAlert
     /**
      * Set updateTime
      *
-     * @param \DateTime $updateTime
+     * @param string $updateTime
      * @return CalendarAlert
      */
     public function setUpdateTime($updateTime)
@@ -179,7 +179,7 @@ class CalendarAlert
     /**
      * Get updateTime
      *
-     * @return \DateTime 
+     * @return string 
      */
     public function getUpdateTime()
     {
@@ -189,7 +189,7 @@ class CalendarAlert
     /**
      * Set startTime
      *
-     * @param \DateTime $startTime
+     * @param string $startTime
      * @return CalendarAlert
      */
     public function setStartTime($startTime)
@@ -202,7 +202,7 @@ class CalendarAlert
     /**
      * Get startTime
      *
-     * @return \DateTime 
+     * @return string 
      */
     public function getStartTime()
     {
@@ -212,7 +212,7 @@ class CalendarAlert
     /**
      * Set endTime
      *
-     * @param \DateTime $endTime
+     * @param string $endTime
      * @return CalendarAlert
      */
     public function setEndTime($endTime)
@@ -225,7 +225,7 @@ class CalendarAlert
     /**
      * Get endTime
      *
-     * @return \DateTime 
+     * @return string 
      */
     public function getEndTime()
     {
@@ -235,7 +235,7 @@ class CalendarAlert
     /**
      * Set alertTime
      *
-     * @param \DateTime $alertTime
+     * @param string $alertTime
      * @return CalendarAlert
      */
     public function setAlertTime($alertTime)
@@ -248,7 +248,7 @@ class CalendarAlert
     /**
      * Get alertTime
      *
-     * @return \DateTime 
+     * @return string 
      */
     public function getAlertTime()
     {
