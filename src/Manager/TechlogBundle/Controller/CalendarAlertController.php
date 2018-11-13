@@ -2,14 +2,18 @@
 namespace Manager\TechlogBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Manager\TechlogBundle\Entity\TaskList;
+use Manager\TechlogBundle\Entity\CalendarAlert;
 
 /**
- * @Route("/tasklist")
+ * @Route("/calendar")
  */
 class CalendarAlertController extends Controller
 {
@@ -28,10 +32,10 @@ class CalendarAlertController extends Controller
         'category'      => array('name'=>'类别', 'width'=>5),
         'start_time'    => array('name'=>'开始时间', 'width'=>5),
         'end_time'      => array('name'=>'结束时间', 'width'=>5),
-        'lunar'         => array('name'=>'是否农历', 'width'=>2),
+        'lunar'         => array('name'=>'农历', 'width'=>2),
         'alert_time'    => array('name'=>'上次提醒', 'width'=>5),
-        'period'        => array('name'=>'循环周期', 'width'=>2),
-        'cycle_type'    => array('name'=>'循环类型', 'width'=>2),
+        'period'        => array('name'=>'周期', 'width'=>2),
+        'cycle_type'    => array('name'=>'单位', 'width'=>2),
         'insert_time'   => array('name'=>'插入时间', 'width'=>5),
         'remark'		=> array('name'=>'备注', 'width'=>8),
     );
@@ -54,6 +58,87 @@ class CalendarAlertController extends Controller
         return $this->getQueryParams($request);
     }
 
+    /**
+     * @Route("/modify", name="task_manager_calendar_modify");
+	 * @Template("ManagerTechlogBundle:CalendarAlert:modify.html.twig")
+     */
+    public function modifyAction (Request $request)
+	{
+        $id = $request->get('id');
+
+		if (!empty($id)) {
+			$em = $this->getDoctrine()->getEntityManager();
+			$entity = $em->getRepository('ManagerTechlogBundle:CalendarAlert')->findOneById($id);
+			if (empty($entity))
+				throw new \Exception('id is wrong');
+		} else {
+			$entity = new CalendarAlert();
+			$entity->setStatus(0);
+		}
+
+		return array(
+			'data'=>$entity,
+			'select_list'=>$this->select_list
+		);
+	}
+
+    /**
+     * @Route("/modifybasic", name="task_manager_calendar_modifybasic");
+     */
+    public function modifybasicAction (Request $request)
+	{
+    	\date_default_timezone_set('PRC');
+
+		$id = $request->get('id');
+		$date = date('Y-m-d H:i:s');
+		$em = $this->getDoctrine()->getEntityManager();
+		if (!empty($id)) {
+			$status = $request->get('status');
+			if (!in_array($status, range(0, 3))) {
+				return new JsonResponse(array('code'=>1, 'msg'=>'状态值错误'));
+			}
+
+			$entity = $em->getRepository('ManagerTechlogBundle:TaskList')->findOneById($id);
+			if (empty($entity)) {
+				return new JsonResponse(array('code'=>1, 'msg'=>'id is wrong'));
+			}
+
+			if ($status > $entity->getStatus()) {
+				$entity->setStatus($status);
+				if ($status == 1) {
+					$entity->setStartTime($date);
+				}
+				if ($status >= 2) {
+					$entity->setFinishTime($date);
+					$entity->setPriority(0);
+				}
+			} else if ($entity->getStatus() > $status) {
+				return new JsonResponse(array('code'=>1, 'msg'=>'status is wrong'));
+			} else {
+				$entity->setName($request->get('name'));
+				$entity->setRemark($request->get('remark'));
+				$entity->setPriority($request->get('priority'));
+				$entity->setCategory($request->get('category'));
+			}
+		} else {
+			$entity = new TaskList();
+			$entity->setInsertTime($date);
+			$entity->setStatus(0);
+			$entity->setFinishTime('0000-00-00 00:00:00');
+			$entity->setStartTime('0000-00-00 00:00:00');
+			$entity->setName($request->get('name'));
+			$entity->setRemark($request->get('remark'));
+			$entity->setPriority($request->get('priority'));
+			$entity->setCategory($request->get('category'));
+		}
+
+		$entity->setUpdateTime($date);
+		$em->persist($entity);
+		$em->flush();
+
+		return new JsonResponse(array('code'=>0, 'msg'=>'更新成功',
+			'url'=>$this->generateUrl('techlog_manager_tasklist_list').'?id='.$id));
+	}
     private function getQueryParams($request)
     {
         $params_key = $this->get_keys();
@@ -73,20 +158,7 @@ class CalendarAlertController extends Controller
         $repository_key = $this->get_repository_key();
 
         $em = $this->getDoctrine()->getEntityManager();
-        list($total, $data) = $em->getRepository('ManagerTechlogBundle:TaskList')->getList($start, $limit, $params, $repository_key);
-        if (!empty($data)) {
-            for ($i = 0; $i < sizeof($data); ++$i) {
-                $entity = $data[$i];
-                if ($entity['start_time'] === '0000-00-00 00:00:00') {
-                    $entity['start_time'] = '';
-                    $data[$i] = $entity;
-                }
-                if ($entity['finish_time'] === '0000-00-00 00:00:00') {
-                    $entity['finish_time'] = '';
-                    $data[$i] = $entity;
-                }
-            }
-        }
+        list($total, $data) = $em->getRepository('ManagerTechlogBundle:CalendarAlert')->getList($start, $limit, $params, $repository_key);
 
         $totalPages = (int)(($total + $limit - 1) / $limit);
 

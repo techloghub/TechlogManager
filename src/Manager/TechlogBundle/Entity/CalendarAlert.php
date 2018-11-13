@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CalendarAlert
  *
  * @ORM\Table(name="calendar_alert")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Manager\TechlogBundle\Repository\CalendarAlertRepository")
  */
 class CalendarAlert
 {

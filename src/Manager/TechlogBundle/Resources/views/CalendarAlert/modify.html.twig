@@ -1,0 +1,129 @@
+{% extends '::base.html.twig' %} {% block main %}
+<script type="text/javascript">
+    document.title = '提醒修改';
+</script>
+
+<style type="text/css">
+    .content_title { font-weight: bold; }
+    #logo_table .extra { display: none; }
+    td a {text-decoration:underline;color:blue;} /* 修改默认链接样式 */
+</style>
+
+<div class="centercontent">
+    <div class="pageheader">
+		{% if data.id != "" %}
+        <h1 class="pagetitle">修改提醒</h1>
+		{% else %}
+        <h1 class="pagetitle">新建提醒</h1>
+		{% endif %}
+        <ul class="hornav">
+            <li><a href="{{ path('task_manager_calendar_list') }}">日历管理</a></li>
+			<li class="current"><a href="{{ path('task_manager_calendar_modify', {'id':data.id}) }}">{% if data.id != "" %}提醒修改{% else %}新建提醒{% endif %}</a></li>
+        </ul>
+    </div>
+
+    <form id="modifyform" name="modifyform" class="stdform_q" method="post">
+        <div style="margin-top:40px;">
+            <p>
+                <label>ID</label>
+				<span class="field"><input type="text" id="id" name="id" class="smallinput" value="{% if data is defined %}{{ data.id }}{% endif %}" readonly="readonly" /></span>
+            </p>
+        </div>
+        <div>
+            <p>
+                <label>任务名称</label>
+                <span class="field"><input type="text" id="name" name="name" class="smallinput" value="{{ data.name }}"/></span>
+            </p>
+        </div>
+		<div>
+			<p>
+				<label>所属分类</label>
+				<span class="field">
+                <select id="category" class="uniformselect" name="category">
+					{% for key,value in select_list['category'] %}
+					<option value="{{ key }}" {% if data.category == key %}selected="selected"{% endif %}>{{ value }}</option>
+					{% endfor %}
+				</select>
+				</span>
+			</p>
+		</div>
+		<div>
+			<p>
+				<label>状态</label>
+				<span class="field">
+                <select id="status" class="uniformselect" name="status">
+					{% for key,value in select_list['status'] %}
+					<option value="{{ key }}" {% if data.status == key %}selected="selected"{% endif %}>{{ value }}</option>
+					{% endfor %}
+				</select>
+				</span>
+			</p>
+		</div>
+        <div>
+            <p>
+                <label>备注</label>
+                <span class="field"><textarea rows="3" type="text" id="remark" name="remark" class="form-control" value="{{ data.remark }}">{{ data.remark }}</textarea></span>
+            </p>
+        </div>
+		<div>
+			<p>
+				<label>操作</label>
+				<span class="field">
+				<button type="button" onclick="confirm_submit()">提交</button>
+				</span>
+			</p>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+function confirm_submit() {
+	if (name == "") {
+		jAlert('请输入名称', '提示');
+		return false;
+	}
+
+    jConfirm
+	(
+	 	"请确认是否提交？",
+		"提示",
+		function(r)
+		{
+			if(r)
+			{
+				$.ajax
+				(
+					{
+						'url'	: "{{ path('task_manager_calendar_modifybasic') }}",
+						'type'	: 'post',
+						'data'	: {'id':id, 'name':name, 'remark':remark, 'status':status,
+							'category' : category, 'priority' : priority},
+                        'dataType' : 'json',
+                        "error" : function (jqXHR, textStatus, errorThrown) 
+                        {
+                            var errMsg = errorThrown == 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!"; jAlert(errMsg, "提示");
+                        },
+                        "success" : function (data) 
+                        {
+                            if (data['code'] != 0) 
+                            {
+                                jAlert("error: " + data['msg']);
+                            }
+                            else
+                            {
+                                jAlert(data['msg'], "提示", function()
+                                    {
+                                        window.location.href=data['url'];
+                                    }
+                                );
+                            }
+                        }
+					}
+				);
+			}
+    	}
+	);
+    return false;
+}
+</script>
+{% endblock %}
