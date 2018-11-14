@@ -20,24 +20,24 @@ class CalendarAlertController extends Controller
     private $input_list = array('id', 'name');
     private $range_list = array('insert_time', 'start_time', 'end_time', 'alert_time', 'period');
     private $select_list = array(
-        'status' => array(0 => '正常执行', 1 => '循环执行', 2 => '停止执行'),
+        'status' => array(0 => '单次执行', 1 => '循环执行', 2 => '停止执行'),
         'lunar' => array(0 => '否', 1 => '是'),
         'category' => array(0 => '生日', 1 => '纪念日', 2 => '任务', 3 => '日常'),
         'cycle_type' => array(0 => '不循环', 1 => '日', 2 => '周', 3 => '月', 4 => '年', 5 => '工作日')
     );
     private $key_value_map = array(
-        'id'			=> array('name'=>'id', 'width'=>2),
+        'id'			=> array('name'=>'id', 'width'=>1),
         'name'			=> array('name'=>'名称', 'width'=>8),
         'status'        => array('name'=>'状态', 'width'=>3),
-        'category'      => array('name'=>'类别', 'width'=>5),
+        'category'      => array('name'=>'类别', 'width'=>1),
         'start_time'    => array('name'=>'开始时间', 'width'=>5),
         'end_time'      => array('name'=>'结束时间', 'width'=>5),
-        'lunar'         => array('name'=>'农历', 'width'=>2),
+        'lunar'         => array('name'=>'农历', 'width'=>1),
         'alert_time'    => array('name'=>'上次提醒', 'width'=>5),
-        'period'        => array('name'=>'周期', 'width'=>2),
+        'period'        => array('name'=>'周期', 'width'=>1),
         'cycle_type'    => array('name'=>'单位', 'width'=>2),
         'insert_time'   => array('name'=>'插入时间', 'width'=>5),
-        'remark'		=> array('name'=>'备注', 'width'=>8),
+        'remark'		=> array('name'=>'备注', 'width'=>13),
     );
 
     /**
@@ -73,7 +73,6 @@ class CalendarAlertController extends Controller
 				throw new \Exception('id is wrong');
 		} else {
 			$entity = new CalendarAlert();
-			$entity->setStatus(0);
 		}
 
 		return array(
@@ -87,58 +86,58 @@ class CalendarAlertController extends Controller
      */
     public function modifybasicAction (Request $request)
 	{
-    	\date_default_timezone_set('PRC');
+		try {
+			\date_default_timezone_set('PRC');
 
-		$id = $request->get('id');
-		$date = date('Y-m-d H:i:s');
-		$em = $this->getDoctrine()->getEntityManager();
-		if (!empty($id)) {
-			$status = $request->get('status');
-			if (!in_array($status, range(0, 3))) {
-				return new JsonResponse(array('code'=>1, 'msg'=>'状态值错误'));
-			}
-
-			$entity = $em->getRepository('ManagerTechlogBundle:TaskList')->findOneById($id);
-			if (empty($entity)) {
-				return new JsonResponse(array('code'=>1, 'msg'=>'id is wrong'));
-			}
-
-			if ($status > $entity->getStatus()) {
-				$entity->setStatus($status);
-				if ($status == 1) {
-					$entity->setStartTime($date);
+			$id = $request->get('id');
+			$date = date('Y-m-d H:i:s');
+			$em = $this->getDoctrine()->getEntityManager();
+			if (!empty($id)) {
+				$status = $request->get('status');
+				if (!in_array($status, range(0, 3))) {
+					return new JsonResponse(array('code'=>1, 'msg'=>'状态值错误'));
 				}
-				if ($status >= 2) {
-					$entity->setFinishTime($date);
-					$entity->setPriority(0);
+
+				$entity = $em->getRepository('ManagerTechlogBundle:CalendarAlert')->findOneById($id);
+				if (empty($entity)) {
+					return new JsonResponse(array('code'=>1, 'msg'=>'id is wrong'));
 				}
-			} else if ($entity->getStatus() > $status) {
-				return new JsonResponse(array('code'=>1, 'msg'=>'status is wrong'));
 			} else {
-				$entity->setName($request->get('name'));
-				$entity->setRemark($request->get('remark'));
-				$entity->setPriority($request->get('priority'));
-				$entity->setCategory($request->get('category'));
+				$entity = new CalendarAlert();
+				$entity->setInsertTime($date);
+				$entity->setAlertTime('0000-00-00 00:00:00');
 			}
-		} else {
-			$entity = new TaskList();
-			$entity->setInsertTime($date);
-			$entity->setStatus(0);
-			$entity->setFinishTime('0000-00-00 00:00:00');
-			$entity->setStartTime('0000-00-00 00:00:00');
+
 			$entity->setName($request->get('name'));
-			$entity->setRemark($request->get('remark'));
-			$entity->setPriority($request->get('priority'));
 			$entity->setCategory($request->get('category'));
+			$entity->setStatus($request->get('status'));
+			$entity->setStartTime($request->get('start_time'));
+			if (empty($request->get('end_time'))) {
+				$entity->setEndTime($request->get('start_time'));
+			} else {
+				$entity->setEndTime($request->get('end_time'));
+			}
+			$entity->setLunar($request->get('lunar'));
+			if (empty($request->get('period'))) {
+				$entity->setPeriod(0);
+			} else {
+				$entity->setPeriod($request->get('period'));
+			}
+			$entity->setCycleType($request->get('cycle_type'));
+			$entity->setRemark($request->get('remark'));
+			$entity->setUpdateTime($date);
+
+			$entity->setUpdateTime($date);
+			$em->persist($entity);
+			$em->flush();
+
+			return new JsonResponse(array('code'=>0, 'msg'=>'更新成功',
+				'url'=>$this->generateUrl('task_manager_calendar_list').'?id='.$id));
+		} catch (\Exception $e) {
+			return new JsonResponse(array('code'=>1, 'msg'=>var_export($e, true)));
 		}
-
-		$entity->setUpdateTime($date);
-		$em->persist($entity);
-		$em->flush();
-
-		return new JsonResponse(array('code'=>0, 'msg'=>'更新成功',
-			'url'=>$this->generateUrl('techlog_manager_tasklist_list').'?id='.$id));
 	}
+
     private function getQueryParams($request)
     {
         $params_key = $this->get_keys();

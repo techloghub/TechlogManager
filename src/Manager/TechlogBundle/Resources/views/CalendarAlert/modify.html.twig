@@ -51,9 +51,51 @@
 			<p>
 				<label>状态</label>
 				<span class="field">
-                <select id="status" class="uniformselect" name="status">
+                <select id="status" onchange="change_status()" class="uniformselect" name="status">
 					{% for key,value in select_list['status'] %}
 					<option value="{{ key }}" {% if data.status == key %}selected="selected"{% endif %}>{{ value }}</option>
+					{% endfor %}
+				</select>
+				</span>
+			</p>
+		</div>
+        <div>
+            <p>
+                <label>开始时间</label>
+                <span class="field"><input type="text" id="start_time" name="start_time" class="smallinput" value="{{ data.startTime }}"/></span>
+            </p>
+        </div>
+        <div id="end_time_div" style="display:none;">
+            <p>
+                <label>结束时间</label>
+                <span class="field"><input type="text" id="end_time" name="end_time" class="smallinput" value="{{ data.endTime }}"/></span>
+            </p>
+        </div>
+		<div>
+			<p>
+				<label>是否农历</label>
+				<span class="field">
+                <select id="lunar" class="uniformselect" name="lunar">
+					{% for key,value in select_list['lunar'] %}
+					<option value="{{ key }}" {% if data.lunar == key %}selected="selected"{% endif %}>{{ value }}</option>
+					{% endfor %}
+				</select>
+				</span>
+			</p>
+		</div>
+        <div id="period_div" style="display:none;">
+            <p>
+                <label>循环周期</label>
+                <span class="field"><input type="text" id="period" name="period" class="smallinput" value="{{ data.period }}"/></span>
+            </p>
+        </div>
+        <div id="cycle_type_div" style="display:none;">
+			<p>
+				<label>周期单位</label>
+				<span class="field">
+                <select id="cycle_type" class="uniformselect" name="cycle_type">
+					{% for key,value in select_list['cycle_type'] %}
+					<option value="{{ key }}" {% if data.cycleType == key %}selected="selected"{% endif %}>{{ value }}</option>
 					{% endfor %}
 				</select>
 				</span>
@@ -77,9 +119,38 @@
 </div>
 
 <script type="text/javascript">
+$(document).ready(function() {
+    var datetimeConfig = {
+        dateFormat: 'yy-mm-dd',
+        timeFormat: 'HH:mm:ss',
+        showSecond: true
+    };
+    $('#start_time').datetimepicker(datetimeConfig);
+    $('#end_time').datetimepicker(datetimeConfig);
+})
+
+function change_status() {
+	var status = $('#status').val();
+	if (status != 0) {
+		$('#end_time_div').show();
+		$('#period_div').show();
+		$('#cycle_type_div').show();
+	} else {
+		$('#end_time_div').hide();
+		$('#period_div').hide();
+		$('#cycle_type_div').hide();
+	}
+}
+
 function confirm_submit() {
+	var name = $('#name').val();
+	var start_time = $('#start_time').val();
 	if (name == "") {
 		jAlert('请输入名称', '提示');
+		return false;
+	}
+	if (start_time == "") {
+		jAlert('请输入开始时间', '提示');
 		return false;
 	}
 
@@ -96,8 +167,7 @@ function confirm_submit() {
 					{
 						'url'	: "{{ path('task_manager_calendar_modifybasic') }}",
 						'type'	: 'post',
-						'data'	: {'id':id, 'name':name, 'remark':remark, 'status':status,
-							'category' : category, 'priority' : priority},
+						'data'	: get_params(),
                         'dataType' : 'json',
                         "error" : function (jqXHR, textStatus, errorThrown) 
                         {
@@ -105,12 +175,9 @@ function confirm_submit() {
                         },
                         "success" : function (data) 
                         {
-                            if (data['code'] != 0) 
-                            {
+                            if (data['code'] != 0) {
                                 jAlert("error: " + data['msg']);
-                            }
-                            else
-                            {
+                            } else {
                                 jAlert(data['msg'], "提示", function()
                                     {
                                         window.location.href=data['url'];
@@ -124,6 +191,17 @@ function confirm_submit() {
     	}
 	);
     return false;
+}
+
+function get_params() {
+	var keys = ['id', 'name', 'status', 'category', 'start_time', 'end_time',
+		'lunar', 'period', 'cycle_type', 'remark'];
+	var result = {};
+	for (index in keys) {
+		var key = keys[index];
+		result[key] = $('#' + key).val();
+	}
+	return result;
 }
 </script>
 {% endblock %}

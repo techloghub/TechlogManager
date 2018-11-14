@@ -33,20 +33,14 @@
             <tr>
                 {% for key,value in key_value_map %}
                 {% if key in select_list|keys and select_list[key][info[key]] is defined %}
-				<td {% if info['status'] == 1 %}style="color:blue"{% elseif info['status'] == 0 %}style="color:red"{% endif %}>{{ select_list[key][info[key]] }}</td>
+                <td>{{ select_list[key][info[key]] }}</td>
                 {% else %}
-				<td {% if info['status'] == 1 %}style="color:blue"{% elseif info['status'] == 0 %}style="color:red"{% endif %}>{% if key == 'name' %}<strong>{% endif %}{% if key != 'finish_time' or info[key] != '0000-00-00 00:00:00' %}{{ info[key] }}{% endif %}{% if key == 'name' %}</strong>{% endif %}</td>
+				<td>{{ info[key] }}</td>
                 {% endif %}
                 {% endfor %}
                 <td>
-					<a class="btnstyle" style="margin-right:5px" href="{{ path('techlog_manager_tasklist_modify', {'id':info['id']}) }}">修改</a>
-					{% if info['status'] < 2 %}
-					<a id="modify_task_status" class="btnstyle" style="margin-right:5px" href="javascript:void(0)" onclick="modify_status({{ info['id'] }}, {{ info['status']+1 }})">{% if info['status'] == 0 %}开始任务{% elseif info['status'] == 1 %}完成任务{% endif %}</a>
-					{% endif %}
-					{% if info['status'] != 2 %}
-					<a class="btnstyle" style="margin-right:5px;border:black;background:black" href="javascript:void(0)" onclick="modify_status({{ info['id'] }}, 3)">取消任务</a>
-					{% endif %}
-                </td>
+					<a class="btnstyle" style="margin-right:5px" href="{{ path('task_manager_calendar_modify', {'id':info['id']}) }}">修改</a>
+				</td>
             </tr>
             {% endfor %}
         </tbody>
