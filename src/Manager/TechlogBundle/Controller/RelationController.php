@@ -57,10 +57,11 @@ class RelationController extends Controller
     {
 		try
 		{
-			if (empty($request->get('article_id')
-				or empty($request->get('tag_id')))
-			)
-				return new JsonResponse(array('code'=>1, 'msg'=>'参数错误'));
+			if ($request->get('article_id', 0) <= 0
+				or $request->get('tag_id', 0) <= 0
+			) {
+                return new JsonResponse(array('code' => 1, 'msg' => '参数错误'));
+            }
 
 			$tag_id = $request->get('tag_id');
 			$article_id = $request->get('article_id');
