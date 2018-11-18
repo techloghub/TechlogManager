@@ -25,8 +25,8 @@ $(document).ready(function() {
         $('#end_updatetime').datetimepicker(datetimeConfig);
         $('#start_date').datetimepicker(datetimeConfig);
         $('#end_date').datetimepicker(datetimeConfig);
-        hideProgress();
     }
+    hideProgress();
 
    $('#queryform').submit(function() {
         var params = getParams();
