@@ -39,8 +39,9 @@ td
 //需要传入下面js的变量定义
 var GLOBAL_CONF = {
     "action_query" : "{{ path('techlog_manager_tasklist_query') }}",
+    "time_keys": ['insert_time', 'finish_time', 'start_time'],
     "params_key" : { {% for key in params_key %}{{ key }}:0,{% endfor %} }
-};
+}
 </script>
 <script type="text/javascript" src="/bundles/techlogmanager/js/article/list.js"></script>
 
