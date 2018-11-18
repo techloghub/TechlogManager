@@ -4,21 +4,29 @@ $(document).ready(function() {
         timeFormat: 'HH:mm:ss',
         showSecond: true
     };
-    $('#start_insert_time').datetimepicker(datetimeConfig);
-    $('#end_insert_time').datetimepicker(datetimeConfig);
-    $('#start_update_time').datetimepicker(datetimeConfig);
-    $('#end_update_time').datetimepicker(datetimeConfig);
-    $('#start_finish_time').datetimepicker(datetimeConfig);
-    $('#end_finish_time').datetimepicker(datetimeConfig);
-    $('#start_date').datetimepicker(datetimeConfig);
-    $('#end_date').datetimepicker(datetimeConfig);
-    $('#start_inserttime').datetimepicker(datetimeConfig);
-    $('#end_inserttime').datetimepicker(datetimeConfig);
-    $('#start_updatetime').datetimepicker(datetimeConfig);
-    $('#end_updatetime').datetimepicker(datetimeConfig);
-    $('#start_date').datetimepicker(datetimeConfig);
-    $('#end_date').datetimepicker(datetimeConfig);
-    hideProgress();
+    if ('time_keys' in GLOBAL_CONF) {
+        for (var index in GLOBAL_CONF['time_keys']) {
+            var key = GLOBAL_CONF['time_keys'][index];
+            $('#start_' + key).datetimepicker(datetimeConfig);
+            $('#end_' + key).datetimepicker(datetimeConfig);
+        }
+    } else {
+        $('#start_insert_time').datetimepicker(datetimeConfig);
+        $('#end_insert_time').datetimepicker(datetimeConfig);
+        $('#start_update_time').datetimepicker(datetimeConfig);
+        $('#end_update_time').datetimepicker(datetimeConfig);
+        $('#start_finish_time').datetimepicker(datetimeConfig);
+        $('#end_finish_time').datetimepicker(datetimeConfig);
+        $('#start_date').datetimepicker(datetimeConfig);
+        $('#end_date').datetimepicker(datetimeConfig);
+        $('#start_inserttime').datetimepicker(datetimeConfig);
+        $('#end_inserttime').datetimepicker(datetimeConfig);
+        $('#start_updatetime').datetimepicker(datetimeConfig);
+        $('#end_updatetime').datetimepicker(datetimeConfig);
+        $('#start_date').datetimepicker(datetimeConfig);
+        $('#end_date').datetimepicker(datetimeConfig);
+        hideProgress();
+    }
 
    $('#queryform').submit(function() {
         var params = getParams();
@@ -35,7 +43,7 @@ $(document).ready(function() {
                 "error" : function (jqXHR, textStatus, errorThrown)
                 {
                     hideProgress();
-                    var errMsg = errorThrown == 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙着呢!";
+                    var errMsg = errorThrown === 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙着呢!";
                     jAlert(errMsg, "提示");
                 },
                 "success" : function (data)
@@ -53,7 +61,7 @@ $(document).ready(function() {
 
     //bind分页及其他事件
     bindEvt(false);
-})
+});
 
 //查询结果(page为0表示当前页)
 function queryResult (start)
@@ -75,7 +83,7 @@ function queryResult (start)
         "dataType" : "html",
         "error" : function (jqXHR, textStatus, errorThrown) {
             hideProgress();
-            var errMsg = errorThrown == 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙，请稍后!"; jAlert(errMsg, "提示");
+            var errMsg = errorThrown === 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙，请稍后!"; jAlert(errMsg, "提示");
         },
         "success" : function (data) {
             $("#query_result").html(data);
@@ -106,10 +114,10 @@ function bindEvt(needUniform)
                 "data" : {"id" : id},
                 "dataType" : "json",
                 "error" : function (jqXHR, textStatus, errorThrown) {
-                    var errMsg = errorThrown == 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!"; jAlert(errMsg, "提示");
+                    var errMsg = errorThrown === 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!"; jAlert(errMsg, "提示");
                 },
                 "success" : function (data) {
-                    if (data['code'] != 0) {
+                    if (data['code'] !== 0) {
                         jAlert("error: " + data['msg'], "提示");
                     } else {
                         queryResult(0);
@@ -132,7 +140,7 @@ function bindEvt(needUniform)
             queryResult(page);
         }
     });
-};
+}
 
 function showProgress()
 {
@@ -172,7 +180,7 @@ function query_result (sortby)
             "error" : function (jqXHR, textStatus, errorThrown)
             {
                 hideProgress();
-                var errMsg = errorThrown == 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙着呢!";
+                var errMsg = errorThrown === 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙着呢!";
                 jAlert(errMsg, "提示");
             },
             "success" : function (data)
