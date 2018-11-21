@@ -60,7 +60,8 @@ class CalendarAlertController extends Controller
 
     /**
      * @Route("/modify", name="task_manager_calendar_modify");
-	 * @Template("ManagerTechlogBundle:CalendarAlert:modify.html.twig")
+     * @Template("ManagerTechlogBundle:CalendarAlert:modify.html.twig")
+     * @throws \Exception
      */
     public function modifyAction (Request $request)
 	{
@@ -112,17 +113,14 @@ class CalendarAlertController extends Controller
 			$entity->setCategory($request->get('category'));
 			$entity->setStatus($request->get('status'));
 			$entity->setStartTime($request->get('start_time'));
-			if (empty($request->get('end_time'))) {
+			$endTime = $request->get('end_time');
+			if (empty($endTime)) {
 				$entity->setEndTime($request->get('start_time'));
 			} else {
-				$entity->setEndTime($request->get('end_time'));
+				$entity->setEndTime($endTime);
 			}
 			$entity->setLunar($request->get('lunar'));
-			if (empty($request->get('period'))) {
-				$entity->setPeriod(0);
-			} else {
-				$entity->setPeriod($request->get('period'));
-			}
+            $entity->setPeriod($request->get('period', 0));
 			$entity->setCycleType($request->get('cycle_type'));
 			$entity->setRemark($request->get('remark'));
 			$entity->setUpdateTime($date);
