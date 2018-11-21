@@ -105,5 +105,12 @@ class CalendarAlert
      */
     private $remark;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="next_time", type="datetime", nullable=false)
+     */
+    private $nextTime;
+
 
 }

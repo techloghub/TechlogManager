@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CalendarAlert
  *
  * @ORM\Table(name="calendar_alert")
- * @ORM\Entity(repositoryClass="Manager\TechlogBundle\Repository\CalendarAlertRepository")
+ * @ORM\Entity
  */
 class CalendarAlert
 {
@@ -29,37 +29,37 @@ class CalendarAlert
     private $name;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="insert_time", type="string", nullable=false)
+     * @ORM\Column(name="insert_time", type="datetime", nullable=false)
      */
     private $insertTime;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="update_time", type="string", nullable=false)
+     * @ORM\Column(name="update_time", type="datetime", nullable=false)
      */
     private $updateTime;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="start_time", type="string", nullable=false)
+     * @ORM\Column(name="start_time", type="datetime", nullable=false)
      */
     private $startTime;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="end_time", type="string", nullable=false)
+     * @ORM\Column(name="end_time", type="datetime", nullable=false)
      */
     private $endTime;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="alert_time", type="string", nullable=false)
+     * @ORM\Column(name="alert_time", type="datetime", nullable=false)
      */
     private $alertTime;
 
@@ -105,6 +105,13 @@ class CalendarAlert
      */
     private $remark;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="next_time", type="datetime", nullable=false)
+     */
+    private $nextTime;
+
 
 
     /**
@@ -143,7 +150,7 @@ class CalendarAlert
     /**
      * Set insertTime
      *
-     * @param string $insertTime
+     * @param \DateTime $insertTime
      * @return CalendarAlert
      */
     public function setInsertTime($insertTime)
@@ -156,7 +163,7 @@ class CalendarAlert
     /**
      * Get insertTime
      *
-     * @return string 
+     * @return \DateTime 
      */
     public function getInsertTime()
     {
@@ -166,7 +173,7 @@ class CalendarAlert
     /**
      * Set updateTime
      *
-     * @param string $updateTime
+     * @param \DateTime $updateTime
      * @return CalendarAlert
      */
     public function setUpdateTime($updateTime)
@@ -179,7 +186,7 @@ class CalendarAlert
     /**
      * Get updateTime
      *
-     * @return string 
+     * @return \DateTime 
      */
     public function getUpdateTime()
     {
@@ -189,7 +196,7 @@ class CalendarAlert
     /**
      * Set startTime
      *
-     * @param string $startTime
+     * @param \DateTime $startTime
      * @return CalendarAlert
      */
     public function setStartTime($startTime)
@@ -202,7 +209,7 @@ class CalendarAlert
     /**
      * Get startTime
      *
-     * @return string 
+     * @return \DateTime 
      */
     public function getStartTime()
     {
@@ -212,7 +219,7 @@ class CalendarAlert
     /**
      * Set endTime
      *
-     * @param string $endTime
+     * @param \DateTime $endTime
      * @return CalendarAlert
      */
     public function setEndTime($endTime)
@@ -225,7 +232,7 @@ class CalendarAlert
     /**
      * Get endTime
      *
-     * @return string 
+     * @return \DateTime 
      */
     public function getEndTime()
     {
@@ -235,7 +242,7 @@ class CalendarAlert
     /**
      * Set alertTime
      *
-     * @param string $alertTime
+     * @param \DateTime $alertTime
      * @return CalendarAlert
      */
     public function setAlertTime($alertTime)
@@ -248,7 +255,7 @@ class CalendarAlert
     /**
      * Get alertTime
      *
-     * @return string 
+     * @return \DateTime 
      */
     public function getAlertTime()
     {
@@ -391,5 +398,28 @@ class CalendarAlert
     public function getRemark()
     {
         return $this->remark;
+    }
+
+    /**
+     * Set nextTime
+     *
+     * @param \DateTime $nextTime
+     * @return CalendarAlert
+     */
+    public function setNextTime($nextTime)
+    {
+        $this->nextTime = $nextTime;
+    
+        return $this;
+    }
+
+    /**
+     * Get nextTime
+     *
+     * @return \DateTime 
+     */
+    public function getNextTime()
+    {
+        return $this->nextTime;
     }
 }
