@@ -52,17 +52,51 @@ class LunarHelper
             default:
                 break;
         }
-        $startTimestamp = strtotime($startTime);
+        $startTimestamp = max(strtotime($startTime), time());
         if ($cycleTime != 0) {
             while ($startTimestamp <= strtotime($endTime)) {
                 if ($startTimestamp >= time()) {
                     return date('Y-m-d H:i:s', $startTimestamp);
+                } else {
+                    $startTimestamp += $cycleTime;
                 }
             }
             return self::$defaultString;
         }
         if ($entity->getCycleType() == 3) {
-
+            while ($startTimestamp <= strtotime($endTime)) {
+                if ($startTimestamp >= time()) {
+                    return date('Y-m-d H:i:s', $startTimestamp);
+                } else {
+                    $startTimestamp = strtotime("+1 month", $startTimestamp);
+                }
+            }
+            return self::$defaultString;
+        }
+        if ($entity->getCycleType() == 4) {
+            while ($startTimestamp <= strtotime($endTime)) {
+                if ($startTimestamp >= time()) {
+                    return date('Y-m-d H:i:s', $startTimestamp);
+                } else {
+                    $startTimestamp = strtotime("+1 year", $startTimestamp);
+                }
+            }
+            return self::$defaultString;
+        }
+        if ($entity->getCycleType() == 5) {
+            while($startTimestamp <= strtotime($endTime)) {
+                $jsoninfo = file_get_contents("http://api.goseek.cn/Tools/holiday?date="
+                    .date('Ymd', $startTimestamp));
+                $info = json_decode($jsoninfo, true);
+                if (empty($info)) {
+                    return self::$defaultString;
+                }
+                if ($info['data'] == 0) {
+                    return date('Y-m-d H:i:s', $startTimestamp);
+                }
+                $startTimestamp += 24 * 3600;
+            }
+            return self::$defaultString;
         }
 
         return self::$defaultString;

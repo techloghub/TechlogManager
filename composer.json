@@ -29,7 +29,8 @@
         "doctrine/doctrine-fixtures-bundle": "dev-master",
         "sonata-project/exporter": "dev-master",
         "bcc/resque-bundle": "dev-master",
-        "liuggio/ExcelBundle": "dev-master"
+        "liuggio/ExcelBundle": "dev-master",
+      "ext-json": "*"
     },
     "scripts": {
 

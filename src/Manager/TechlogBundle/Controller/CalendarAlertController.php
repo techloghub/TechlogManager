@@ -1,6 +1,7 @@
 <?php
 namespace Manager\TechlogBundle\Controller;
 
+use Component\Library\LunarHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -124,8 +125,7 @@ class CalendarAlertController extends Controller
 			$entity->setCycleType($request->get('cycle_type'));
 			$entity->setRemark($request->get('remark'));
 			$entity->setUpdateTime($date);
-
-			$entity->setUpdateTime($date);
+            $entity->setNextTime(LunarHelper::getNextAlert($entity));
 			$em->persist($entity);
 			$em->flush();
 
