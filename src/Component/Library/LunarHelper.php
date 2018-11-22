@@ -25,7 +25,7 @@ class LunarHelper
      * @return string 时间字符串
      */
     public static function getNextAlert($entity) {
-        if ($entity->getStatus() != 1 && $entity->getStatus() != 2) {
+        if ($entity->getStatus() != 1 && $entity->getStatus() != 0) {
             return self::$defaultString;
         }
         $startTime = $entity->getStartTime();
@@ -35,7 +35,7 @@ class LunarHelper
             $startTime = self::getSorlarDate($entity->getStartTime());
             $endTime = self::getSorlarDate($entity->getEndTime());
         }
-        if ($entity->getStatus() == 1) {
+        if ($entity->getStatus() == 0) {
             return strtotime($startTime) < time() ? self::$defaultString : $startTime;
         }
         if ($entity->getCycleType() == 0 || strtotime($endTime) < time()) {
