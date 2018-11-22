@@ -69,7 +69,7 @@ class LunarHelper
                 if ($startTimestamp >= time()) {
                     return date('Y-m-d H:i:s', $startTimestamp);
                 } else {
-                    $startTimestamp = (new DateTime("+1 month", $startTimestamp);
+                    $startTimestamp = (new DateTime("+1 month", $startTimestamp))->format("U");
                 }
             }
             return self::$defaultString;
