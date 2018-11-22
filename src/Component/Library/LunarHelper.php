@@ -1,4 +1,7 @@
 <?php
+
+/** @noinspection PhpLanguageLevelInspection */
+
 /**
  * Created by PhpStorm.
  * User: liuzeyu
@@ -79,7 +82,7 @@ class LunarHelper
                 if ($startTimestamp >= time()) {
                     return date('Y-m-d H:i:s', $startTimestamp);
                 } else {
-                    $startTimestamp = (new DateTime("+1 year", $startTimestamp);
+                    $startTimestamp = (new DateTime("+1 year", $startTimestamp))->format("U");
                 }
             }
             return self::$defaultString;
