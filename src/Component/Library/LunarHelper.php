@@ -9,6 +9,7 @@
 namespace Component\Library;
 
 
+use DateTime;
 use Manager\TechlogBundle\Entity\CalendarAlert;
 
 class LunarHelper
@@ -36,9 +37,9 @@ class LunarHelper
             $endTime = self::getSorlarDate($entity->getEndTime());
         }
         if ($entity->getStatus() == 0) {
-            return strtotime($startTime) < time() ? self::$defaultString : $startTime;
+            return (new DateTime($startTime))->format("U") < time() ? self::$defaultString : $startTime;
         }
-        if ($entity->getCycleType() == 0 || strtotime($endTime) < time()) {
+        if ($entity->getCycleType() == 0 || (new DateTime($endTime))->format("U") < time()) {
             return self::$defaultString;
         }
         $cycleTime = 0;
@@ -52,9 +53,9 @@ class LunarHelper
             default:
                 break;
         }
-        $startTimestamp = max(strtotime($startTime), time());
+        $startTimestamp = max((new DateTime($startTime))->format("U"), time());
         if ($cycleTime != 0) {
-            while ($startTimestamp <= strtotime($endTime)) {
+            while ($startTimestamp <= (new DateTime($endTime))->format("U")) {
                 if ($startTimestamp >= time()) {
                     return date('Y-m-d H:i:s', $startTimestamp);
                 } else {
@@ -64,27 +65,27 @@ class LunarHelper
             return self::$defaultString;
         }
         if ($entity->getCycleType() == 3) {
-            while ($startTimestamp <= strtotime($endTime)) {
+            while ($startTimestamp <= (new DateTime($endTime))->format("U")) {
                 if ($startTimestamp >= time()) {
                     return date('Y-m-d H:i:s', $startTimestamp);
                 } else {
-                    $startTimestamp = strtotime("+1 month", $startTimestamp);
+                    $startTimestamp = (new DateTime("+1 month", $startTimestamp);
                 }
             }
             return self::$defaultString;
         }
         if ($entity->getCycleType() == 4) {
-            while ($startTimestamp <= strtotime($endTime)) {
+            while ($startTimestamp <= (new DateTime($endTime))->format("U")) {
                 if ($startTimestamp >= time()) {
                     return date('Y-m-d H:i:s', $startTimestamp);
                 } else {
-                    $startTimestamp = strtotime("+1 year", $startTimestamp);
+                    $startTimestamp = (new DateTime("+1 year", $startTimestamp);
                 }
             }
             return self::$defaultString;
         }
         if ($entity->getCycleType() == 5) {
-            while($startTimestamp <= strtotime($endTime)) {
+            while($startTimestamp <= (new DateTime($endTime))->format("U")) {
                 $jsoninfo = file_get_contents("http://api.goseek.cn/Tools/holiday?date="
                     .date('Ymd', $startTimestamp));
                 $info = json_decode($jsoninfo, true);
@@ -103,7 +104,7 @@ class LunarHelper
     }
 
     private static function getSorlarDate($date) {
-        $timestamp = strtotime($date);
+        $timestamp = (new DateTime($date))->format("U");
         $year = date('Y', $timestamp);
         $month = date('m', $timestamp);
         $date = date('d', $timestamp);
