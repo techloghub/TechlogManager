@@ -53,7 +53,7 @@ class LunarHelper
             default:
                 break;
         }
-        $startTimestamp = max((new DateTime($startTime))->format("U"), time());
+        $startTimestamp = (new DateTime($startTime))->format("U");
         if ($cycleTime != 0) {
             while ($startTimestamp <= (new DateTime($endTime))->format("U")) {
                 if ($startTimestamp >= time()) {
@@ -79,7 +79,7 @@ class LunarHelper
                 if ($startTimestamp >= time()) {
                     return date('Y-m-d H:i:s', $startTimestamp);
                 } else {
-                    $startTimestamp = (new DateTime("+1 year", $startTimestamp);
+                    $startTimestamp = (new DateTime("+1 year", $startTimestamp))->format("U");
                 }
             }
             return self::$defaultString;
