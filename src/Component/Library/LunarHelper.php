@@ -89,6 +89,9 @@ class LunarHelper
         }
         if ($entity->getCycleType() == 5) {
             while($startTimestamp <= (new DateTime($endTime))->format("U")) {
+                if ($startTimestamp <= (new DateTime(date("Y-m-d"),time()) + 3600 * 24)->format('U')) {
+                    $startTimestamp += 3600 * 24;
+                }
                 $jsoninfo = file_get_contents("http://api.goseek.cn/Tools/holiday?date="
                     .date('Ymd', $startTimestamp));
                 $info = json_decode($jsoninfo, true);
