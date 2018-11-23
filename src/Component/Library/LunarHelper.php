@@ -1,4 +1,7 @@
 <?php
+
+/** @noinspection PhpLanguageLevelInspection */
+
 /**
  * Created by PhpStorm.
  * User: liuzeyu
