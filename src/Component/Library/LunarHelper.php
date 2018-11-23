@@ -73,7 +73,7 @@ class LunarHelper
                     return date('Y-m-d H:i:s', $startTimestamp);
                 } else {
                     $date = date_create(date('Y-m-d H:i:s', $startTimestamp));
-                    date_add($date, 'P1M');
+                    date_add($date, date_interval_create_from_date_string('P1M'));
                     $startTimestamp = $date->format("U");
                 }
             }
@@ -85,7 +85,7 @@ class LunarHelper
                     return date('Y-m-d H:i:s', $startTimestamp);
                 } else {
                     $date = date_create(date('Y-m-d H:i:s', $startTimestamp));
-                    date_add($date, 'P1Y');
+                    date_add($date, date_interval_create_from_date_string('P1Y'));
                     $startTimestamp = $date->format("U");
                 }
             }
