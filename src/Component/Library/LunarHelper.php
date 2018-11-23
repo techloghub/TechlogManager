@@ -12,6 +12,7 @@
 namespace Component\Library;
 
 
+use DateInterval;
 use DateTime;
 use Manager\TechlogBundle\Entity\CalendarAlert;
 
@@ -27,6 +28,7 @@ class LunarHelper
      * 通过 Entity 获取时间戳
      * @param CalendarAlert $entity
      * @return string 时间字符串
+     * @throws \Exception
      */
     public static function getNextAlert($entity) {
         if ($entity->getStatus() != 1 && $entity->getStatus() != 0) {
@@ -73,7 +75,7 @@ class LunarHelper
                     return date('Y-m-d H:i:s', $startTimestamp);
                 } else {
                     $date = date_create(date('Y-m-d H:i:s', $startTimestamp));
-                    date_add($date, date_interval_create_from_date_string('P1M'));
+                    $date->add(new DateInterval('P1M'));
                     $startTimestamp = $date->format("U");
                 }
             }
@@ -85,7 +87,7 @@ class LunarHelper
                     return date('Y-m-d H:i:s', $startTimestamp);
                 } else {
                     $date = date_create(date('Y-m-d H:i:s', $startTimestamp));
-                    date_add($date, date_interval_create_from_date_string('P1Y'));
+                    $date->add(new DateInterval('P1Y'));
                     $startTimestamp = $date->format("U");
                 }
             }
