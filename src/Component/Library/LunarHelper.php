@@ -56,7 +56,7 @@ class LunarHelper
             default:
                 break;
         }
-        $startTimestamp = max((new DateTime($startTime))->format("U"), time());
+        $startTimestamp = (new DateTime($startTime))->format("U");
         if ($cycleTime != 0) {
             while ($startTimestamp <= (new DateTime($endTime))->format("U")) {
                 if ($startTimestamp >= time()) {

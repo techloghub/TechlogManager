@@ -65,7 +65,7 @@
                 <span class="field"><input type="text" id="start_time" name="start_time" class="smallinput" value="{{ data.startTime }}"/></span>
             </p>
         </div>
-        <div id="end_time_div" style="display:none;">
+		<div id="end_time_div" {% if data.status == 0 %}style="display:none;"{% endif %}>
             <p>
                 <label>结束时间</label>
                 <span class="field"><input type="text" id="end_time" name="end_time" class="smallinput" value="{{ data.endTime }}"/></span>
@@ -83,13 +83,13 @@
 				</span>
 			</p>
 		</div>
-        <div id="period_div" style="display:none;">
+		<div id="period_div" {% if data.status == 0 %}style="display:none;"{% endif %}>
             <p>
                 <label>循环周期</label>
                 <span class="field"><input type="text" id="period" name="period" class="smallinput" value="{{ data.period }}"/></span>
             </p>
         </div>
-        <div id="cycle_type_div" style="display:none;">
+		<div id="cycle_type_div" {% if data.status == 0 %}style="display:none;"{% endif %}>
 			<p>
 				<label>周期单位</label>
 				<span class="field">
