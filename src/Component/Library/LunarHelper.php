@@ -72,7 +72,9 @@ class LunarHelper
                 if ($startTimestamp >= time()) {
                     return date('Y-m-d H:i:s', $startTimestamp);
                 } else {
-                    $startTimestamp = (new DateTime("+1 month", $startTimestamp))->format("U");
+                    $date = date_create(date('Y-m-d H:i:s', $startTimestamp));
+                    date_add($date, 'P1M');
+                    $startTimestamp = $date->format("U");
                 }
             }
             return self::$defaultString;
@@ -82,7 +84,9 @@ class LunarHelper
                 if ($startTimestamp >= time()) {
                     return date('Y-m-d H:i:s', $startTimestamp);
                 } else {
-                    $startTimestamp = (new DateTime("+1 year", $startTimestamp))->format("U");
+                    $date = date_create(date('Y-m-d H:i:s', $startTimestamp));
+                    date_add($date, 'P1Y');
+                    $startTimestamp = $date->format("U");
                 }
             }
             return self::$defaultString;
