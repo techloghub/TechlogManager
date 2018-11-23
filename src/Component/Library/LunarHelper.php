@@ -95,7 +95,7 @@ class LunarHelper
                 if (empty($info)) {
                     return self::$defaultString;
                 }
-                if ($info['data'] == 0) {
+                if ($info['data'] == 0 && $startTimestamp >= time()) {
                     return date('Y-m-d H:i:s', $startTimestamp);
                 }
                 $startTimestamp += 24 * 3600;

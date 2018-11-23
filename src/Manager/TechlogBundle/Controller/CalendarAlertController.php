@@ -88,7 +88,6 @@ class CalendarAlertController extends Controller
      */
     public function modifybasicAction (Request $request)
 	{
-		try {
 			\date_default_timezone_set('PRC');
 
 			$id = $request->get('id');
@@ -131,9 +130,6 @@ class CalendarAlertController extends Controller
 
 			return new JsonResponse(array('code'=>1, 'msg'=>$entity->getNextTime(),
 				'url'=>$this->generateUrl('task_manager_calendar_list').'?id='.$id));
-		} catch (\Exception $e) {
-			return new JsonResponse(array('code'=>1, 'msg'=>var_export($e, true)));
-		}
 	}
 
     private function getQueryParams($request)
