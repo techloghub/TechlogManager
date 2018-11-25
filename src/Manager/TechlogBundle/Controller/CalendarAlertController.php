@@ -85,6 +85,8 @@ class CalendarAlertController extends Controller
 
     /**
      * @Route("/modifybasic", name="task_manager_calendar_modifybasic");
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
      */
     public function modifybasicAction (Request $request)
 	{
@@ -128,7 +130,7 @@ class CalendarAlertController extends Controller
 			$em->persist($entity);
 			$em->flush();
 
-			return new JsonResponse(array('code'=>1, 'msg'=>$entity->getNextTime(),
+			return new JsonResponse(array('code' => 0, 'msg'=>'设置成功',
 				'url'=>$this->generateUrl('task_manager_calendar_list').'?id='.$id));
 	}
 
