@@ -120,18 +120,18 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    var datetimeConfig = {
+    const datetimeConfig = {
         dateFormat: 'yy-mm-dd',
         timeFormat: 'HH:mm:ss',
         showSecond: true
     };
     $('#start_time').datetimepicker(datetimeConfig);
     $('#end_time').datetimepicker(datetimeConfig);
-})
+});
 
 function change_status() {
-	var status = $('#status').val();
-	if (status != 0) {
+    const status = $('#status').val();
+	if (status !== 0) {
 		$('#end_time_div').show();
 		$('#period_div').show();
 		$('#cycle_type_div').show();
@@ -143,13 +143,13 @@ function change_status() {
 }
 
 function confirm_submit() {
-	var name = $('#name').val();
-	var start_time = $('#start_time').val();
-	if (name == "") {
+    const name = $('#name').val();
+    const start_time = $('#start_time').val();
+	if (name === "") {
 		jAlert('请输入名称', '提示');
 		return false;
 	}
-	if (start_time == "") {
+	if (start_time === "") {
 		jAlert('请输入开始时间', '提示');
 		return false;
 	}
@@ -171,11 +171,12 @@ function confirm_submit() {
                         'dataType' : 'json',
                         "error" : function (jqXHR, textStatus, errorThrown) 
                         {
-                            var errMsg = errorThrown == 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!"; jAlert(errMsg, "提示");
+                            const errMsg = errorThrown === 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!";
+                            jAlert(errMsg, "提示");
                         },
                         "success" : function (data) 
                         {
-                            if (data['code'] != 0) {
+                            if (data['code'] !== 0) {
                                 jAlert("error: " + data['msg']);
                             } else {
                                 jAlert(data['msg'], "提示", function()
