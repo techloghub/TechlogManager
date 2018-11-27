@@ -24,7 +24,7 @@
 // );
     $.confirm({
         title: '日历管理',
-        content: '<input type="text" id="time" name="time" class="smallinput"/>',
+        content: '<input type="text" id="time" name="time" class="miniinput"/>',
         buttons: {
             ok: {
                 text: '好的'
@@ -37,12 +37,11 @@
             }
         },
         onContentReady: function () {
-            var datetimeConfig = {
+            $('#time').timepicker({
                 dateFormat: 'yy-mm-dd',
                 timeFormat: 'HH:mm:ss',
                 showSecond: true
-            };
-            $('#time').timepicker(datetimeConfig);
+            });
         },
         columnClass: 'small'
     });
