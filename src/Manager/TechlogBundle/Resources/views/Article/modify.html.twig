@@ -110,7 +110,13 @@ function confirm_submit()
                                         content: data['msg']
                                     });
                                 } else {
-                                    window.location.href=data['url'];
+                                    $.alter({
+										title: '提示',
+										content: data['msg'],
+										action: function () {
+                                            window.location.href=data['url'];
+                                        }
+									});
                                 }
                             }
                         });
