@@ -46,13 +46,14 @@ function confirm_submit()
     $.confirm
 	({
 	 	content: "请确认是否提交？",
-		tittle: "提示",
+		title: "提示",
 		buttons: {
 	 	    cancel: {
 	 	        text: '取消'
 			},
 			confirm: {
 	 	        text: '确认',
+                btnClass: 'btn-blue',
 				action: function() {
 					$.ajax
 					(
