@@ -121,23 +121,23 @@ function confirm_submit()
 	var email = $('#email').val();
 	var content = $('#content').val();
 
-	if (nickname == "") {
+	if (nickname === "") {
 		jAlert('请输入昵称', '提示');
 		return false;
 	}
-	if (qq != "" && isNaN(qq)) {
+	if (qq !== "" && isNaN(qq)) {
 		jAlert('请输入正确的 QQ 号码', '提示');
 		return false;
 	}
-	if (email != "" && !isEmail(email)) {
+	if (email !== "" && !isEmail(email)) {
 		jAlert('请输入正确的 Email 号码', '提示');
 		return false;
 	}
-	if (email == "" && qq == "") {
+	if (email === "" && qq === "") {
 		jAlert('QQ 号码和 Email 地址请至少填写一个', '提示');
 		return false;
 	}
-	if (content == "") {
+	if (content === "") {
 		jAlert('请输入评论内容', '提示');
 		return false;
 	}
@@ -159,21 +159,14 @@ function confirm_submit()
                         'dataType' : 'json',
                         "error" : function (jqXHR, textStatus, errorThrown) 
                         {
-                            var errMsg = errorThrown == 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!"; jAlert(errMsg, "提示");
+                            var errMsg = errorThrown === 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!"; jAlert(errMsg, "提示");
                         },
                         "success" : function (data) 
                         {
-                            if (data['code'] != 0) 
-                            {
+                            if (data['code'] !== 0) {
                                 jAlert("error: " + data['msg']);
-                            }
-                            else
-                            {
-                                jAlert(data['msg'], "提示", function()
-                                    {
-                                        window.location.href=data['url'];
-                                    }
-                                );
+                            } else {
+								window.location.href=data['url'];
                             }
                         }
 					}
@@ -187,7 +180,7 @@ function confirm_submit()
 function isEmail(email) {
 	var regu = "^(([0-9a-zA-Z]+)|([0-9a-zA-Z]+[_.0-9a-zA-Z-]*))@([a-zA-Z0-9-]+[.])+([a-zA-Z]{2}|net|com|gov|mil|org|edu|int|name|asia)$";
 	var re = new RegExp(regu);
-	return email.search(re) != -1;
+	return email.search(re) !== -1;
 }
 
 function get_params()

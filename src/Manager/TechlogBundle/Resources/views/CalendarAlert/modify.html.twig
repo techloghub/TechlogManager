@@ -146,51 +146,63 @@ function confirm_submit() {
     const name = $('#name').val();
     const start_time = $('#start_time').val();
 	if (name === "") {
-		jAlert('请输入名称', '提示');
+	    $.alert({
+			title: '提示',
+            btnClass: 'btn-red',
+			content: '请输入名称'
+		});
 		return false;
 	}
 	if (start_time === "") {
-		jAlert('请输入开始时间', '提示');
+        $.alert({
+            title: '提示',
+            btnClass: 'btn-red',
+            content: '请输入开始时间'
+        });
 		return false;
 	}
 
-    jConfirm
-	(
-	 	"请确认是否提交？",
-		"提示",
-		function(r)
-		{
-			if(r)
-			{
-				$.ajax
-				(
-					{
-						'url'	: "{{ path('task_manager_calendar_modifybasic') }}",
-						'type'	: 'post',
-						'data'	: get_params(),
-                        'dataType' : 'json',
-                        "error" : function (jqXHR, textStatus, errorThrown) 
-                        {
+    $.confirm ({
+        content: "请确认是否提交？",
+        title: "提示",
+		buttons: {
+            cancel: {
+                text: '取消'
+		    },
+			confirm: {
+                text: '确认',
+                btnClass: 'btn-blue',
+				action: function() {
+                    $.ajax ({
+                        'url': "{{ path('task_manager_calendar_modifybasic') }}",
+                        'type': 'post',
+                        'data': get_params(),
+                        'dataType': 'json',
+                        "error": function (jqXHR, textStatus, errorThrown) {
                             const errMsg = errorThrown === 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!";
-                            jAlert(errMsg, "提示");
+                            $.alert({
+                                title: '提示',
+                                btnClass: 'btn-red',
+                                content: errMsg
+                            });
                         },
-                        "success" : function (data) 
-                        {
+                        "success": function (data) {
                             if (data['code'] !== 0) {
-                                jAlert("error: " + data['msg']);
+                                $.alert({
+                                    title: 'ERROR',
+                                    btnClass: 'btn-red',
+                                    content: data['msg']
+                                });
                             } else {
-                                jAlert(data['msg'], "提示", function()
-                                    {
-                                        window.location.href=data['url'];
-                                    }
-                                );
+								window.location.href = data['url'];
                             }
                         }
-					}
-				);
+                    });
+                }
 			}
-    	}
-	);
+		}
+
+    });
     return false;
 }
 

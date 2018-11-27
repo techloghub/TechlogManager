@@ -17,34 +17,28 @@
 </div>
 
 <script type="text/javascript">
-// jAlert('message', "日历管理", function()
-//     {
-//         window.location.href='#';
-//     }
-// );
-    $.confirm({
-        title: '日历管理',
-        content: '<form class="stdform_q"><input type="text" id="time" name="time" class="miniinput"/></form>',
-        buttons: {
-            ok: {
-                text: '好的'
-            },
-            delay: {
-                text: '推迟',
-                action: function () {
-                    console.log('hello world')
-                }
-            }
-        },
-        onContentReady: function () {
-            $('#time').timepicker({
-                dateFormat: 'yy-mm-dd',
-                timeFormat: 'HH:mm:ss',
-                showSecond: true
-            });
-        },
-        columnClass: 'small'
-    });
+    // $.confirm({
+    //     title: '日历管理',
+    //     content: '<form class="stdform_q"><input type="text" id="time" name="time" class="miniinput"/></form>',
+    //     buttons: {
+    //         ok: {
+    //             text: '好的'
+    //         },
+    //         delay: {
+    //             text: '推迟',
+    //             action: function () {
+    //                 console.log('hello world')
+    //             }
+    //         }
+    //     },
+    //     onContentReady: function () {
+    //         $('#time').timepicker({
+    //             dateFormat: 'yy-mm-dd',
+    //             timeFormat: 'HH:mm:ss',
+    //             showSecond: true
+    //         });
+    //     },
+    //     columnClass: 'small'
+    // });
 </script>
-
 <!-- centercontent -->
