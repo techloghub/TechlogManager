@@ -55,49 +55,30 @@ function confirm_submit()
 	 	        text: '确认',
                 btnClass: 'btn-blue',
 				action: function() {
-					$.ajax
-					(
-						{
-							'url'	: "{{ commit_url }}",
-							'type'	: 'post',
-							'data'	: get_params(),
-							'dataType' : 'json',
-							"error" : function (jqXHR, textStatus, errorThrown)
-							{
-								var errMsg = errorThrown === 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!";
-								// jAlert(errMsg, "提示");
+					$.ajax ({
+						'url'	: "{{ commit_url }}",
+						'type'	: 'post',
+						'data'	: get_params(),
+						'dataType' : 'json',
+						"error" : function (jqXHR, textStatus, errorThrown) {
+							var errMsg = errorThrown === 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!";
+							$.alert({
+								title: '提示',
+                                btnClass: 'btn-red',
+								content: errMsg
+							});
+						},
+						"success" : function (data) {
+							if (data['code'] !== 0) {
 								$.alert({
-									title: '提示',
-									content: errMsg
+									title: 'ERROR',
+									content: data['msg']
 								});
-							},
-							"success" : function (data)
-							{
-								if (data['code'] !== 0)
-								{
-									$.alert({
-										title: 'ERROR',
-										content: data['msg']
-									});
-								}
-								else
-								{
-									$.confirm({
-										title: '提示',
-										content: data['msg'],
-										buttons: {
-											confirm: {
-												text: '确认',
-												action: function() {
-													window.location.href=data['url'];
-												}
-											}
-										}
-									});
-								}
+							} else {
+								window.location.href=data['url'];
 							}
 						}
-					);
+					});
                     return false;
 	 	        }
 			}
