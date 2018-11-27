@@ -17,11 +17,34 @@
 </div>
 
 <script type="text/javascript">
-jAlert('message', "日历管理", function()
-    {
-        window.location.href='#';
-    }
-);
+// jAlert('message', "日历管理", function()
+//     {
+//         window.location.href='#';
+//     }
+// );
+    $.confirm({
+        title: '日历管理',
+        content: '<input type="text" id="time" name="time" class="smallinput"/>',
+        buttons: {
+            ok: {
+                text: '好的'
+            },
+            delay: {
+                text: '推迟',
+                action: function () {
+                    console.log('hello world')
+                }
+            }
+        },
+        onContentReady: function () {
+            var datetimeConfig = {
+                dateFormat: 'yy-mm-dd',
+                timeFormat: 'HH:mm:ss',
+                showSecond: true
+            };
+            $('#time').timepicker(datetimeConfig);
+        }
+    });
 </script>
 
 <!-- centercontent -->

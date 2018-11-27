@@ -29,7 +29,11 @@ $(document).ready(function() {
                 {
                     hideProgress();
                     var errMsg = errorThrown === 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙着呢!";
-                    jAlert(errMsg, "提示");
+                    // jAlert(errMsg, "提示");
+                    $.alert({
+                        title: '提示',
+                        content: errMsg
+                    });
                 },
                 "success" : function (data)
                 {
