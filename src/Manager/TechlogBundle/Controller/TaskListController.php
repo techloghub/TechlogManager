@@ -26,16 +26,16 @@ class TaskListController extends Controller
 		'category' => array(0 => '技术', 1 => '工作', 2 => '生活', 3 => '读书')
 	);
     private $key_value_map = array(
-		'id'			=> array('name'=>'id', 'width'=>2),
-		'name'			=> array('name'=>'名称', 'width'=>8),
+		'id'			=> array('name'=>'id', 'width'=>1),
+		'name'			=> array('name'=>'名称', 'width'=>6),
 		'category'		=> array('name'=>'分类', 'width'=>2),
 		'priority'		=> array('name'=>'优先级', 'width'=>2),
-		'insert_time'	=> array('name'=>'创建时间', 'width'=>5),
-		'start_time'	=> array('name'=>'开始时间', 'width'=>5),
+		'insert_time'	=> array('name'=>'创建时间', 'width'=>4),
+		'start_time'	=> array('name'=>'开始时间', 'width'=>4),
 		#'update_time'	=> array('name'=>'更新时间', 'width'=>5),
-		'finish_time'	=> array('name'=>'完成时间', 'width'=>5),
+		'finish_time'	=> array('name'=>'完成时间', 'width'=>4),
 		'status'		=> array('name'=>'状态', 'width'=>2),
-		'remark'		=> array('name'=>'备注', 'width'=>8),
+		'remark'		=> array('name'=>'备注', 'width'=>7),
     );
 
     /**
