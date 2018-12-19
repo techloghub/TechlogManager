@@ -41,7 +41,7 @@
                 <td>
 					<a class="btnstyle" style="margin-right:5px" href="{{ path('techlog_manager_tasklist_modify', {'id':info['id']}) }}">修改</a>
 					{% if info['status'] < 2 %}
-					<a id="modify_task_status" class="btnstyle" style="margin-right:5px" href="javascript:void(0)" onclick="modify_status({{ info['id'] }}, {{ info['status']+1 }})">{% if info['status'] == 0 %}开始{% elseif info['status'] == 1 %}完成任务{% endif %}</a>
+					<a id="modify_task_status" class="btnstyle" style="margin-right:5px" href="javascript:void(0)" onclick="modify_status({{ info['id'] }}, {{ info['status']+1 }})">{% if info['status'] == 0 %}开始{% elseif info['status'] == 1 %}完成{% endif %}</a>
 					{% endif %}
 					{% if info['status'] != 2 %}
 					<a class="btnstyle" style="margin-right:5px;border:black;background:black" href="javascript:void(0)" onclick="modify_status({{ info['id'] }}, 3)">取消</a>
