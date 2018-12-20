@@ -33,7 +33,7 @@ class TaskListRepository extends EntityRepository
 				$where_sql .= ' desc';
 			$where_sql .= ', priority desc';
 		} else {
-			$where_sql .= ' order by field(status, 1, 0, 2,  3) asc';
+			$where_sql .= ' order by field(status, 1, 0, 2,  3) asc, priority desc';
 		}
 
         $total_sql .= $where_sql;
