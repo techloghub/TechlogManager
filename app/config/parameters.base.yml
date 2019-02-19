@@ -13,10 +13,6 @@ parameters:
     #web path
     web.path: "%kernel.root_dir%/../web"    
     
-    #短信sdk的配置(开放平台的短信）
-    sdk_sms.id: "17"
-    sdk_sms.key: "rt9wa5ze"
-    
     #导出的路径
     data_exporter.out_dir: "%web.path%/export"
     
