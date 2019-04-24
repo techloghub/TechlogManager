@@ -294,11 +294,9 @@ jQuery(document).ready(function(){
 					jQuery('.vernav').addClass('menucoll').find('ul').hide();
 				}
 			} else if(jQuery('.vernav2').length > 0) {
-			//} else {
 				jQuery('body').addClass('withmenucoll2');
 				jQuery('.iconmenu').addClass('menucoll2');
 			}
-            $('.leftmenuli').hide();
 			
 			jQuery(this).addClass('togglemenu_collapsed');
 			
@@ -307,10 +305,8 @@ jQuery(document).ready(function(){
 				jQuery('<li><span>'+label+'</span></li>')
 					.insertBefore(jQuery(this).parent().find('ul li:first-child'));
 			});
-       //                 setCookie('toggle_nav_status','collapsed','1');
+            $('.leftmenuli').hide();
 		} else {
-			
-			//if(jQuery('.iconmenu').hasClass('vernav')) {
 			if(jQuery('.vernav').length > 0) {
 				if(jQuery('.vernav').hasClass('iconmenu')) {
 					jQuery('body').removeClass('withmenucoll');
@@ -320,7 +316,6 @@ jQuery(document).ready(function(){
 					jQuery('.vernav').removeClass('menucoll').find('ul').show();
 				}
 			} else if(jQuery('.vernav2').length > 0) {	
-			//} else {
 				jQuery('body').removeClass('withmenucoll2');
 				jQuery('.iconmenu').removeClass('menucoll2');
 			}
@@ -328,7 +323,6 @@ jQuery(document).ready(function(){
 			
 			jQuery('.iconmenu ul ul li:first-child').remove();
             $('.leftmenuli').show();
-        //                setCookie('toggle_nav_status','expanded','1');
 		}
 	});
 	
