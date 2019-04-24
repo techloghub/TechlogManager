@@ -298,6 +298,7 @@ jQuery(document).ready(function(){
 				jQuery('body').addClass('withmenucoll2');
 				jQuery('.iconmenu').addClass('menucoll2');
 			}
+            $('.leftmenuli').hide();
 			
 			jQuery(this).addClass('togglemenu_collapsed');
 			
@@ -326,6 +327,7 @@ jQuery(document).ready(function(){
 			jQuery(this).removeClass('togglemenu_collapsed');	
 			
 			jQuery('.iconmenu ul ul li:first-child').remove();
+            $('.leftmenuli').show();
         //                setCookie('toggle_nav_status','expanded','1');
 		}
 	});
