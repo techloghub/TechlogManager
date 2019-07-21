@@ -121,7 +121,7 @@ class LunarHelper
         if ($leapMonth > 0 && $leapMonth < $month) {
             $month++;
         }
-        $solar = self::$lunar->convertLunarToSolar($year, $month, $date);
+        $solar = self::$lunar->convertSolarToLunar($year, $month, $date);
         return $solar[0].'-'.$solar[1].'-'.$solar[2].' '.date('H:i:s', $date);
     }
 }
