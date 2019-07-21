@@ -68,7 +68,7 @@ class CalendarAlertController extends Controller
     public function modifyAction (Request $request)
 	{
         $id = $request->get('id');
-        $lunar = '';
+        $start_lunar = '';
 
 		if (!empty($id)) {
 			$em = $this->getDoctrine()->getEntityManager();
@@ -76,17 +76,35 @@ class CalendarAlertController extends Controller
 			if (empty($entity))
 				throw new \Exception('id is wrong');
             $lunar = LunarHelper::getSorlarDate($entity->getStartTime());
-            $lunar = substr($lunar, 0, strpos($lunar, ' '));
+            $start_lunar = substr($lunar, strpos($lunar, '-') + 1,
+                strpos($lunar, ' ') - strpos($lunar, '-') - 1);
+            $lunar = LunarHelper::getSorlarDate($entity->getEndTime());
+            $end_lunar = substr($lunar, strpos($lunar, '-') + 1,
+                strpos($lunar, ' ') - strpos($lunar, '-') - 1);
 		} else {
 			$entity = new CalendarAlert();
 		}
 
 		return array(
 			'data' => $entity,
-			'lunar' => $lunar,
+			'start_lunar' => $start_lunar,
+			'end_lunar' => $end_lunar,
 			'select_list' => $this->select_list
 		);
 	}
+
+    /**
+     * @Route("/lunarbasic", name="task_manager_calendar_getlunarbasic");
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
+     */
+    public function lunarbasicAction (Request $request)
+	{
+        $time = $request->get('time');
+        $lunar = LunarHelper::getSorlarDate($time);
+        return new Response(substr($lunar, strpos($lunar, '-') + 1,
+            strpos($lunar, ' ') - strpos($lunar, '-') - 1));
+    }
 
     /**
      * @Route("/modifybasic", name="task_manager_calendar_modifybasic");

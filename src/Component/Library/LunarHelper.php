@@ -120,10 +120,6 @@ class LunarHelper
         $year = date('Y', $timestamp);
         $month = date('m', $timestamp);
         $date = date('d', $timestamp);
-        $leapMonth = self::$lunar->getLeapMonth($year);
-        if ($leapMonth > 0 && $leapMonth < $month) {
-            $month++;
-        }
         $solar = self::$lunar->convertSolarToLunar($year, $month, $date);
         return $solar[0].'-'.$solar[1].'-'.$solar[2].' '.date('H:i:s', $date);
     }

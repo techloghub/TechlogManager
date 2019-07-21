@@ -62,13 +62,13 @@
         <div id="start_time_div" {% if data.status == 2 %}style="display:none;"{% endif %}>
             <p>
                 <label>开始时间</label>
-                <span class="field"><input type="text" id="start_time" name="start_time" class="smallinput" value="{{ data.startTime }}"/></span>
+                <span class="field"><input type="text" id="start_time" name="start_time" class="smallinput" value="{{ data.startTime }}" onblur="get_lunar('start')"/></span><span class="field" id="start_lunar_div">{% if start_lunar != '' %}(农历：{{ start_lunar }}){% endif %}</span>
             </p>
         </div>
 		<div id="end_time_div" {% if data.status != 1 %}style="display:none;"{% endif %}>
             <p>
                 <label>结束时间</label>
-                <span class="field"><input type="text" id="end_time" name="end_time" class="smallinput" value="{{ data.endTime }}"/></span>
+                <span class="field"><input type="text" id="end_time" name="end_time" class="smallinput" value="{{ data.endTime }}" onblur="get_lunar('end')"/></span><span class="field" id="end_lunar_div">{% if end_lunar != '' %}(农历：{{ end_lunar }}){% endif %}</span>
             </p>
         </div>
 		<div id="lunar_div" {% if data.status == 2 %}style="display:none;"{% endif %}>
@@ -234,6 +234,27 @@ function get_params() {
 		result[key] = $('#' + key).val();
 	}
 	return result;
+}
+
+function get_lunar(symbel) {
+    var time = $('#' + symbel + '_time').val();
+    $.ajax ({
+        'url': "{{ path('task_manager_calendar_getlunarbasic') }}",
+        'type': 'post',
+        'data': {'time': time},
+        'dataType': 'html',
+        "error": function (jqXHR, textStatus, errorThrown) {
+            const errMsg = errorThrown === 'Forbidden' ? "亲，没权限呢!" : "亲，服务器忙!";
+            $.alert({
+                title: '提示',
+                btnClass: 'btn-red',
+                content: errMsg
+            });
+        },
+        "success": function (data) {
+            $('#' + symbel + '_lunar_div').html('(农历：' + data + ')');
+        }
+    });
 }
 </script>
 {% endblock %}
