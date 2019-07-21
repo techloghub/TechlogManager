@@ -75,10 +75,10 @@ class CalendarAlertController extends Controller
 			$entity = $em->getRepository('ManagerTechlogBundle:CalendarAlert')->findOneById($id);
 			if (empty($entity))
 				throw new \Exception('id is wrong');
-            $lunar = LunarHelper::getSorlarDate($entity->getStartTime());
+            $lunar = LunarHelper::getLunarDate($entity->getStartTime());
             $start_lunar = substr($lunar, strpos($lunar, '-') + 1,
                 strpos($lunar, ' ') - strpos($lunar, '-') - 1);
-            $lunar = LunarHelper::getSorlarDate($entity->getEndTime());
+            $lunar = LunarHelper::getLunarDate($entity->getEndTime());
             $end_lunar = substr($lunar, strpos($lunar, '-') + 1,
                 strpos($lunar, ' ') - strpos($lunar, '-') - 1);
 		} else {
