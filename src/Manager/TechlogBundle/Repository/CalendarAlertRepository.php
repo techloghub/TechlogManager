@@ -22,7 +22,7 @@ class CalendarAlertRepository extends EntityRepository
 
 		$space = array('id', 'name', 'insert_time', 'update_time', 'start_time',
 			'end_time', 'alert_time', 'status', 'lunar', 'cycle_type', 'period',
-			'category', 'remark');
+			'category', 'remark', 'next_time');
 
         $total_sql = 'select count(*) as total from calendar_alert where 1';
         $data_sql = 'select '.implode(', ', $space).' from calendar_alert where 1';
