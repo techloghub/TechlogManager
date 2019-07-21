@@ -59,19 +59,19 @@
 				</span>
 			</p>
 		</div>
-        <div>
+        <div id="start_time_div" {% if data.status == 2 %}style="display:none;"{% endif %}>
             <p>
                 <label>开始时间</label>
                 <span class="field"><input type="text" id="start_time" name="start_time" class="smallinput" value="{{ data.startTime }}"/></span>
             </p>
         </div>
-		<div id="end_time_div" {% if data.status == 0 %}style="display:none;"{% endif %}>
+		<div id="end_time_div" {% if data.status != 1 %}style="display:none;"{% endif %}>
             <p>
                 <label>结束时间</label>
                 <span class="field"><input type="text" id="end_time" name="end_time" class="smallinput" value="{{ data.endTime }}"/></span>
             </p>
         </div>
-		<div>
+		<div id="lunar_div" {% if data.status == 2 %}style="display:none;"{% endif %}>
 			<p>
 				<label>是否农历</label>
 				<span class="field">
@@ -83,13 +83,13 @@
 				</span>
 			</p>
 		</div>
-		<div id="period_div" {% if data.status == 0 %}style="display:none;"{% endif %}>
+		<div id="period_div" {% if data.status != 1 %}style="display:none;"{% endif %}>
             <p>
                 <label>循环周期</label>
                 <span class="field"><input type="text" id="period" name="period" class="smallinput" value="{{ data.period }}"/></span>
             </p>
         </div>
-		<div id="cycle_type_div" {% if data.status == 0 %}style="display:none;"{% endif %}>
+		<div id="cycle_type_div" {% if data.status != 1 %}style="display:none;"{% endif %}>
 			<p>
 				<label>周期单位</label>
 				<span class="field">
@@ -131,14 +131,22 @@ $(document).ready(function() {
 
 function change_status() {
     const status = $('#status').val();
-	if (status !== 0) {
+	if (status == 1) {
 		$('#end_time_div').show();
 		$('#period_div').show();
 		$('#cycle_type_div').show();
+        $('#lunar_div').show();
 	} else {
 		$('#end_time_div').hide();
 		$('#period_div').hide();
 		$('#cycle_type_div').hide();
+		if (status == 2) {
+		    $('#lunar_div').hide();
+            $('#start_time_div').hide();
+        } else {
+            $('#lunar_div').show();
+            $('#start_time_div').hide();
+        }
 	}
 }
 

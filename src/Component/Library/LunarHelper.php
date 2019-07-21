@@ -22,7 +22,7 @@ class LunarHelper
      * @var Lunar
      */
     static $lunar;
-    static $defaultString = '0000-00-00 00:00:00';
+    static $defaultString = '1970-01-01 08:00:00';
 
     /**
      * 通过 Entity 获取时间戳

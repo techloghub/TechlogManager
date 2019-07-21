@@ -23,7 +23,7 @@ class CalendarAlertController extends Controller
     private $select_list = array(
         'status' => array(0 => '单次执行', 1 => '循环执行', 2 => '停止执行'),
         'lunar' => array(0 => '否', 1 => '是'),
-        'category' => array(0 => '生日', 1 => '纪念日', 2 => '任务', 3 => '日常'),
+        'category' => array(0 => '生日', 1 => '纪念日', 2 => '任务', 3 => '日常', 4 => '节日'),
         'cycle_type' => array(0 => '不循环', 1 => '日', 2 => '周', 3 => '月', 4 => '年', 5 => '工作日')
     );
     private $key_value_map = array(
@@ -108,7 +108,7 @@ class CalendarAlertController extends Controller
 			} else {
 				$entity = new CalendarAlert();
 				$entity->setInsertTime($date);
-				$entity->setAlertTime('0000-00-00 00:00:00');
+				$entity->setAlertTime('1970-01-01 08:00:00');
 			}
 
 			$entity->setName($request->get('name'));
