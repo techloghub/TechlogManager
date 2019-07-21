@@ -68,12 +68,14 @@ class CalendarAlertController extends Controller
     public function modifyAction (Request $request)
 	{
         $id = $request->get('id');
+        $lunar = '';
 
 		if (!empty($id)) {
 			$em = $this->getDoctrine()->getEntityManager();
 			$entity = $em->getRepository('ManagerTechlogBundle:CalendarAlert')->findOneById($id);
 			if (empty($entity))
 				throw new \Exception('id is wrong');
+            $lunar =  LunarHelper::getSorlarDate($entity->getStartTime());
 		} else {
 			$entity = new CalendarAlert();
 		}
