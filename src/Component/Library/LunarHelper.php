@@ -112,7 +112,7 @@ class LunarHelper
         return self::$defaultString;
     }
 
-    private static function getSorlarDate($date) {
+    public static function getSorlarDate($date) {
         $timestamp = (new DateTime($date))->format("U");
         $year = date('Y', $timestamp);
         $month = date('m', $timestamp);
