@@ -202,12 +202,14 @@ function confirm_submit() {
                                     content: data['msg']
                                 });
                             } else {
-                                $.alert({
+                                $.confirm({
 									title: '提示',
 									content: data['msg'],
-									action: function () {
-									    console.log('hello');
-                                        window.location.href = data['url'];
+                                    buttons: {
+									    text: '确认',
+                                        action: function () {
+                                            window.location.href = data['url'];
+                                        }
                                     }
 								})
                             }
