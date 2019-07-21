@@ -38,8 +38,8 @@ class LunarHelper
         $endTime = $entity->getEndTime();
         if ($entity->getLunar() == 1) {
             self::$lunar = new Lunar();
-            $startTime = self::getSorlarDate($entity->getStartTime());
-            $endTime = self::getSorlarDate($entity->getEndTime());
+            $startTime = self::getLunarDate($entity->getStartTime());
+            $endTime = self::getLunarDate($entity->getEndTime());
         }
         if ($entity->getStatus() == 0) {
             return (new DateTime($startTime))->format("U") < time() ? self::$defaultString : $startTime;
@@ -112,7 +112,7 @@ class LunarHelper
         return self::$defaultString;
     }
 
-    public static function getSorlarDate($date) {
+    public static function getLunarDate($date) {
         if (!isset(self::$lunar)) {
             self::$lunar = new Lunar();
         }
