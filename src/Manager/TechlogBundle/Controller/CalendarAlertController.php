@@ -34,7 +34,7 @@ class CalendarAlertController extends Controller
         'start_time'    => array('name'=>'开始时间', 'width'=>5),
         'end_time'      => array('name'=>'结束时间', 'width'=>5),
         'lunar'         => array('name'=>'农历', 'width'=>1),
-        'alart_time'    => array('name'=>'上次提醒', 'width'=>5),
+        'alert_time'    => array('name'=>'上次提醒', 'width'=>5),
         'next_time'     => array('name'=>'下次提醒', 'width'=>5),
         'period'        => array('name'=>'周期', 'width'=>1),
         'cycle_type'    => array('name'=>'单位', 'width'=>2),
