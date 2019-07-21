@@ -206,9 +206,11 @@ function confirm_submit() {
 									title: '提示',
 									content: data['msg'],
                                     buttons: {
-									    text: '确认',
-                                        action: function () {
-                                            window.location.href = data['url'];
+									    confirm: {
+                                            text: '确认',
+                                            action: function () {
+                                                window.location.href = data['url'];
+                                            }
                                         }
                                     }
 								})
