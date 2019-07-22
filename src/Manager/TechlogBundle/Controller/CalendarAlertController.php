@@ -2,7 +2,6 @@
 namespace Manager\TechlogBundle\Controller;
 
 use Component\Library\LunarHelper;
-use function date_default_timezone_set;
 use Doctrine\ORM\OptimisticLockException;
 use DateTime;
 use Exception;
@@ -126,7 +125,7 @@ class CalendarAlertController extends Controller
      */
     public function modifybasicAction (Request $request)
 	{
-			date_default_timezone_set('PRC');
+			\date_default_timezone_set('PRC');
 
 			$id = $request->get('id');
 			$date = date('Y-m-d H:i:s');
