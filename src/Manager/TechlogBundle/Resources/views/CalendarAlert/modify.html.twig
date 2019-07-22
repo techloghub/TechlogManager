@@ -132,6 +132,8 @@ $(document).ready(function() {
 function change_status() {
     const status = $('#status').val();
 	if (status == 1) {
+	    // 循环执行
+        $('#start_time_div').show();
 		$('#end_time_div').show();
 		$('#period_div').show();
 		$('#cycle_type_div').show();
@@ -141,11 +143,13 @@ function change_status() {
 		$('#period_div').hide();
 		$('#cycle_type_div').hide();
 		if (status == 2) {
+		    // 停止执行
 		    $('#lunar_div').hide();
             $('#start_time_div').hide();
         } else {
+		    // 单次执行
             $('#lunar_div').show();
-            $('#start_time_div').hide();
+            $('#start_time_div').show();
         }
 	}
 }

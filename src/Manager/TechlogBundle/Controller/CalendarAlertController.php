@@ -2,6 +2,7 @@
 namespace Manager\TechlogBundle\Controller;
 
 use Component\Library\LunarHelper;
+use DateTime;
 use Doctrine\ORM\OptimisticLockException;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -172,7 +173,7 @@ class CalendarAlertController extends Controller
 			$em->persist($entity);
 			$em->flush();
 
-			return new JsonResponse(array('code' => 0, 'msg'=>$startTimestamp,
+			return new JsonResponse(array('code' => 0, 'msg'=>'设置成功',
 				'url'=>$this->generateUrl('task_manager_calendar_list').'?id='.$id));
 	}
 
