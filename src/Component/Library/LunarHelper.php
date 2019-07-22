@@ -82,7 +82,9 @@ class LunarHelper
         if ($cycleTime != 0) {
             while ($startTimestamp <= (new DateTime($endTime))->format("U")) {
                 if ($startTimestamp >= time()) {
-                    return date('Y-m-d H:i:s', $startTimestamp);
+                    $dateobj = new DateTime("@".$startTimestamp);
+                    $dateobj->setTimezone(timezone_open('Asia/HONG_KONG'));
+                    return $dateobj->format("Y-m-d H:i:s");
                 } else {
                     $startTimestamp += $cycleTime;
                 }
@@ -98,7 +100,9 @@ class LunarHelper
         if ($entity->getCycleType() == 3 || $entity->getCycleType() == 4) {
             while ($startTimestamp <= (new DateTime($endTime))->format("U")) {
                 if ($startTimestamp >= time()) {
-                    return date('Y-m-d H:i:s', $startTimestamp);
+                    $dateobj = new DateTime("@".$startTimestamp);
+                    $dateobj->setTimezone(timezone_open('Asia/HONG_KONG'));
+                    return $dateobj->format("Y-m-d H:i:s");
                 } else {
                     if ($entity->getLunar() == 0) {
                         // 阳历

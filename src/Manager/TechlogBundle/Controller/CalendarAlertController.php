@@ -173,7 +173,7 @@ class CalendarAlertController extends Controller
 			$em->persist($entity);
 			$em->flush();
 
-			return new JsonResponse(array('code' => 0, 'msg'=>'设置成功',
+			return new JsonResponse(array('code' => 0, 'msg'=>'更新成功',
 				'url'=>$this->generateUrl('task_manager_calendar_list').'?id='.$id));
 	}
 
