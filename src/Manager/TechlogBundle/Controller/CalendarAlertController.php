@@ -166,7 +166,6 @@ class CalendarAlertController extends Controller
         $entity->setUpdateTime($date);
         $nextTime = LunarHelper::getNextAlert($entity);
 
-        return new JsonResponse(array('code' => 0, 'msg' => 'next_time: ' . $nextTime, 'url'=>'#'));
         if ($nextTime == '1970-01-01 08:00:00') {
             $entity->setStatus(2);
         }
