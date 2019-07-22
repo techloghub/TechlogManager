@@ -123,58 +123,60 @@ class CalendarAlertController extends Controller
      * @throws Exception
      */
     public function modifybasicAction (Request $request)
-	{
-			\date_default_timezone_set('PRC');
+    {
+        \date_default_timezone_set('PRC');
 
-			$id = $request->get('id');
-			$date = date('Y-m-d H:i:s');
-			$em = $this->getDoctrine()->getEntityManager();
-			if (!empty($id)) {
-				$status = $request->get('status');
-				if (!in_array($status, range(0, 3))) {
-					return new JsonResponse(array('code'=>1, 'msg'=>'状态值错误'));
-				}
-
-				$entity = $em->getRepository('ManagerTechlogBundle:CalendarAlert')->findOneById($id);
-				if (empty($entity)) {
-					return new JsonResponse(array('code'=>1, 'msg'=>'id is wrong'));
-				}
-			} else {
-				$entity = new CalendarAlert();
-				$entity->setInsertTime($date);
-				$entity->setAlertTime('1970-01-01 08:00:00');
-			}
-
-			$entity->setName($request->get('name'));
-			$entity->setCategory($request->get('category'));
-			$entity->setStatus($request->get('status'));
-			$entity->setStartTime($request->get('start_time'));
-			$endTime = $request->get('end_time');
-			if (empty($endTime)) {
-                // 如果没设置，则表示不限，加 100 年
-                $startTimestamp = (new \DateTime($request->get('start_time')))->format("U");
-                $obj = new \DateTime("@".($startTimestamp + 3600*24*365*100));
-                $obj->setTimezone(timezone_open('Asia/HONG_KONG')); 
-				$entity->setEndTime($obj->format("Y-m-d H:i:s"));
-			} else {
-				$entity->setEndTime($endTime);
-			}
-			$entity->setLunar($request->get('lunar'));
-            $entity->setPeriod($request->get('period', 0));
-			$entity->setCycleType($request->get('cycle_type'));
-			$entity->setRemark($request->get('remark'));
-			$entity->setUpdateTime($date);
-			$nextTime = LunarHelper::getNextAlert($entity);
-			if ($nextTime == '1970-01-01 08:00:00') {
-			    $entity->setStatus(2);
+        $id = $request->get('id');
+        $date = date('Y-m-d H:i:s');
+        $em = $this->getDoctrine()->getEntityManager();
+        if (!empty($id)) {
+            $status = $request->get('status');
+            if (!in_array($status, range(0, 3))) {
+                return new JsonResponse(array('code' => 1, 'msg' => '状态值错误'));
             }
-            $entity->setNextTime($nextTime);
-			$em->persist($entity);
-			$em->flush();
 
-            return new JsonResponse(array('code' => 0, 'msg'=>'更新成功',
-                'url'=>$this->generateUrl('task_manager_calendar_list').'?id='.$id));
-	}
+            $entity = $em->getRepository('ManagerTechlogBundle:CalendarAlert')->findOneById($id);
+            if (empty($entity)) {
+                return new JsonResponse(array('code' => 1, 'msg' => 'id is wrong'));
+            }
+        } else {
+            $entity = new CalendarAlert();
+            $entity->setInsertTime($date);
+            $entity->setAlertTime('1970-01-01 08:00:00');
+        }
+
+        $entity->setName($request->get('name'));
+        $entity->setCategory($request->get('category'));
+        $entity->setStatus($request->get('status'));
+        $entity->setStartTime($request->get('start_time'));
+        $endTime = $request->get('end_time');
+        if (empty($endTime)) {
+            // 如果没设置，则表示不限，加 100 年
+            $startTimestamp = (new \DateTime($request->get('start_time')))->format("U");
+            $obj = new \DateTime("@" . ($startTimestamp + 3600 * 24 * 365 * 100));
+            $obj->setTimezone(timezone_open('Asia/HONG_KONG'));
+            $entity->setEndTime($obj->format("Y-m-d H:i:s"));
+        } else {
+            $entity->setEndTime($endTime);
+        }
+        $entity->setLunar($request->get('lunar'));
+        $entity->setPeriod($request->get('period', 0));
+        $entity->setCycleType($request->get('cycle_type'));
+        $entity->setRemark($request->get('remark'));
+        $entity->setUpdateTime($date);
+        $nextTime = LunarHelper::getNextAlert($entity);
+
+        return new JsonResponse(array('code' => 0, 'msg' => 'next_time: ' . $nextTime, 'url'=>'#'));
+        if ($nextTime == '1970-01-01 08:00:00') {
+            $entity->setStatus(2);
+        }
+        $entity->setNextTime($nextTime);
+        $em->persist($entity);
+        $em->flush();
+
+        return new JsonResponse(array('code' => 0, 'msg' => '更新成功',
+            'url' => $this->generateUrl('task_manager_calendar_list') . '?id=' . $id));
+    }
 
     private function getQueryParams($request)
     {

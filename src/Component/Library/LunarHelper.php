@@ -97,8 +97,10 @@ class LunarHelper
          * 按月或年执行，需考虑阴历及闰月
          * **********************************
          */
+        $loopcount = 0;
         if ($entity->getCycleType() == 3 || $entity->getCycleType() == 4) {
             while ($startTimestamp <= (new DateTime($endTime))->format("U")) {
+                $loopcount++;
                 if ($startTimestamp >= time()) {
                     $dateobj = new DateTime("@".$startTimestamp);
                     $dateobj->setTimezone(timezone_open('Asia/HONG_KONG'));
@@ -107,7 +109,11 @@ class LunarHelper
                     if ($entity->getLunar() == 0) {
                         // 阳历
                         $date = date_create(date('Y-m-d H:i:s', $startTimestamp));
-                        $date->add(new DateInterval('P1Y'));
+                        if ($entity->getCycleType() == 3) {
+                            $date->add(new DateInterval('P'.$period.'Y'));
+                        } else {
+                            $date->add(new DateInterval('P'.$period.'M'));
+                        }
                         $startTimestamp = $date->format("U");
                     } else {
                         // 阴历
@@ -119,13 +125,13 @@ class LunarHelper
                         $date = date('d', $startTimestamp);
                         $extra = date('H:i:s', $startTimestamp);
                         $lunardate = self::$lunar->convertSolarToLunar($year, $month, $date);
-                        $year = $entity->getCycleType() == 3 ? $lunardate[0] + $period : $lunardate[0];
-                        $month = $entity->getCycleType() == 4 ? $lunardate[4] + $period : $lunardate[4];
+                        $year = $entity->getCycleType() == 4 ? $lunardate[0] + $period : $lunardate[0];
+                        $month = $entity->getCycleType() == 3 ? $lunardate[4] + $period : $lunardate[4];
                         $date = $lunardate[5];
 
                         // 闰月处理
                         $leapmonth = self::$lunar->getLeapMonth($year);
-                        if ($leapmonth < $month) {
+                        if ($leapmonth != 0 && $leapmonth < $month and $entity->getCycleType() == 4) {
                             $month--;
                         }
 
