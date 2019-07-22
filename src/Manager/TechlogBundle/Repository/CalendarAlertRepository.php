@@ -34,7 +34,7 @@ class CalendarAlertRepository extends EntityRepository
 				$where_sql .= ' desc';
 			$where_sql .= ', id desc';
 		} else {
-			$where_sql .= ' order by id desc';
+			$where_sql .= ' order by next_time desc';
 		}
 
         $total_sql .= $where_sql;
