@@ -125,14 +125,21 @@ class LunarHelper
                         $date = date('d', $startTimestamp);
                         $extra = date('H:i:s', $startTimestamp);
                         $lunardate = self::$lunar->convertSolarToLunar($year, $month, $date);
-                        $year = $entity->getCycleType() == 4 ? $lunardate[0] + $period : $lunardate[0];
-                        $month = $entity->getCycleType() == 3 ? $lunardate[4] + $period : $lunardate[4];
+
+                        if ($entity->getCycleType() == 4) {
+                            $leapmonth = self::$lunar->getLeapMonth($year);
+                            $month = $leapmonth != 0 && $leapmonth < $lunardate[4] ? $lunardate[4] - 1 : $lunardate[4];
+                            $year = $lunardate[0] + $period;
+                        } else {
+                            $year = $lunardate[0];
+                            $month = $lunardate[4] + $period;
+                        }
                         $date = $lunardate[5];
 
                         // 闰月处理
                         $leapmonth = self::$lunar->getLeapMonth($year);
                         if ($leapmonth != 0 && $leapmonth < $month and $entity->getCycleType() == 4) {
-                            $month--;
+                            $month++;
                         }
 
                         $solararray = self::$lunar->convertLunarToSolar($year, $month, $date);
