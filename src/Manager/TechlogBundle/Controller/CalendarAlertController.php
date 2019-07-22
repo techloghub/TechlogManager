@@ -3,7 +3,6 @@ namespace Manager\TechlogBundle\Controller;
 
 use Component\Library\LunarHelper;
 use Doctrine\ORM\OptimisticLockException;
-use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -154,7 +153,9 @@ class CalendarAlertController extends Controller
 			if (empty($endTime)) {
                 // 如果没设置，则表示不限，加 100 年
                 $startTimestamp = (new DateTime($request->get('start_time')))->format("U");
-				$entity->setEndTime(date("Y-m-d H:i", (intval($startTimestamp) + 3600*24*365*100)));
+                $obj = new DateTime("@".($startTimestamp + 3600*24*365*100));
+                $obj->setTimezone(timezone_open('Asia/HONG_KONG')); 
+				$entity->setEndTime($obj->format("Y-m-d H:i:s"));
 			} else {
 				$entity->setEndTime($endTime);
 			}
@@ -171,7 +172,7 @@ class CalendarAlertController extends Controller
 			$em->persist($entity);
 			$em->flush();
 
-			return new JsonResponse(array('code' => 0, 'msg'=>'设置成功',
+			return new JsonResponse(array('code' => 0, 'msg'=>$startTimestamp,
 				'url'=>$this->generateUrl('task_manager_calendar_list').'?id='.$id));
 	}
 
