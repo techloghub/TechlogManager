@@ -2,6 +2,10 @@
 namespace Manager\TechlogBundle\Controller;
 
 use Component\Library\LunarHelper;
+use function date_default_timezone_set;
+use Doctrine\ORM\OptimisticLockException;
+use DateTime;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -45,6 +49,8 @@ class CalendarAlertController extends Controller
     /**
      * @Route("/list", name="task_manager_calendar_list");
      * @Template("ManagerTechlogBundle:CalendarAlert:list.html.twig")
+     * @param Request $request
+     * @return array
      */
     public function listAction (Request $request)
     {
@@ -54,6 +60,8 @@ class CalendarAlertController extends Controller
     /**
      * @Route("/query", name="task_manager_calendar_query")
      * @Template("ManagerTechlogBundle:CalendarAlert:query_result.html.twig")
+     * @param Request $request
+     * @return array
      */
     public function queryAction(Request $request)
     {
@@ -63,7 +71,9 @@ class CalendarAlertController extends Controller
     /**
      * @Route("/modify", name="task_manager_calendar_modify");
      * @Template("ManagerTechlogBundle:CalendarAlert:modify.html.twig")
-     * @throws \Exception
+     * @param Request $request
+     * @return array
+     * @throws Exception
      */
     public function modifyAction (Request $request)
 	{
@@ -74,7 +84,7 @@ class CalendarAlertController extends Controller
 			$em = $this->getDoctrine()->getEntityManager();
 			$entity = $em->getRepository('ManagerTechlogBundle:CalendarAlert')->findOneById($id);
 			if (empty($entity))
-				throw new \Exception('id is wrong');
+				throw new Exception('id is wrong');
             $lunar = LunarHelper::getLunarDate($entity->getStartTime());
             $start_lunar = substr($lunar, strpos($lunar, '-') + 1,
                 strpos($lunar, ' ') - strpos($lunar, '-') - 1);
@@ -95,25 +105,28 @@ class CalendarAlertController extends Controller
 
     /**
      * @Route("/lunarbasic", name="task_manager_calendar_getlunarbasic");
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Exception
+     * @param Request $request
+     * @return Response
+     * @throws Exception
      */
     public function lunarbasicAction (Request $request)
 	{
         $time = $request->get('time');
-        $lunar = LunarHelper::getSorlarDate($time);
+        $lunar = LunarHelper::getLunarDate($time);
         return new Response(substr($lunar, strpos($lunar, '-') + 1,
             strpos($lunar, ' ') - strpos($lunar, '-') - 1));
     }
 
     /**
      * @Route("/modifybasic", name="task_manager_calendar_modifybasic");
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Exception
+     * @param Request $request
+     * @return JsonResponse
+     * @throws OptimisticLockException
+     * @throws Exception
      */
     public function modifybasicAction (Request $request)
 	{
-			\date_default_timezone_set('PRC');
+			date_default_timezone_set('PRC');
 
 			$id = $request->get('id');
 			$date = date('Y-m-d H:i:s');
@@ -140,7 +153,9 @@ class CalendarAlertController extends Controller
 			$entity->setStartTime($request->get('start_time'));
 			$endTime = $request->get('end_time');
 			if (empty($endTime)) {
-				$entity->setEndTime($request->get('start_time'));
+                // 如果没设置，则表示不限，加 100 年
+                $startTimestamp = (new DateTime($request->get('start_time')))->format("U");
+				$entity->setEndTime(date("Y-m-d H:i", (intval($startTimestamp) + 3600*24*365*100)));
 			} else {
 				$entity->setEndTime($endTime);
 			}
@@ -149,7 +164,11 @@ class CalendarAlertController extends Controller
 			$entity->setCycleType($request->get('cycle_type'));
 			$entity->setRemark($request->get('remark'));
 			$entity->setUpdateTime($date);
-            $entity->setNextTime(LunarHelper::getNextAlert($entity));
+			$nextTime = LunarHelper::getNextAlert($entity);
+			if ($nextTime == '1970-01-01 08:00:00') {
+			    $entity->setStatus(2);
+            }
+            $entity->setNextTime($nextTime);
 			$em->persist($entity);
 			$em->flush();
 
@@ -176,7 +195,8 @@ class CalendarAlertController extends Controller
         $repository_key = $this->get_repository_key();
 
         $em = $this->getDoctrine()->getEntityManager();
-        list($total, $data) = $em->getRepository('ManagerTechlogBundle:CalendarAlert')->getList($start, $limit, $params, $repository_key);
+        list($total, $data) = $em->getRepository('ManagerTechlogBundle:CalendarAlert')
+            ->getList($start, $limit, $params, $repository_key);
 
         $totalPages = (int)(($total + $limit - 1) / $limit);
 
