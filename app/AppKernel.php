@@ -19,7 +19,6 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new BCC\ResqueBundle\BCCResqueBundle(),
-            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
 
             new Manager\UserBundle\ManagerUserBundle(),
             new Manager\ApiBundle\ManagerApiBundle(),
