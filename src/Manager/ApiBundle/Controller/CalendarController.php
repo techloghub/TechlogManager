@@ -28,7 +28,7 @@ class CalendarController extends Controller
     {
         \date_default_timezone_set('PRC');
 
-        $id = $request->get('id');
+        $id = $request->get('calendar_id');
         $date = date('Y-m-d H:i:s');
 
         $em = $this->getDoctrine()->getEntityManager();
