@@ -10,6 +10,7 @@ techlog_manager:
 
 manager_api:
     resource: "@ManagerApiBundle/Controller/"
+    type: annotation
     prefix:   /api
 
 manager_user:
