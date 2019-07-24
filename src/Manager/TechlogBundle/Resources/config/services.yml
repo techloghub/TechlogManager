@@ -40,14 +40,6 @@ services:
         class: "%tool.excel_helper.class%"
         arguments: [ "@service_container" ]
 
-    #监控系统请求listener
-    kernel.listener.manager_request_listener:
-        class: Manager\ApiBundle\EventListener\ManagerRequestListener
-        arguments: [ "@service_container" ]
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-            - { name: "monolog.logger", channel: "event" }
-
     #用户的角色服务
     user.role_service:
         class: "%role_service.class%"
