@@ -28,6 +28,7 @@ class CalendarAlertController extends Controller
         'category' => array(0 => '生日', 1 => '纪念日', 2 => '任务', 3 => '日常', 4 => '节日'),
         'cycle_type' => array(0 => '不循环', 1 => '日', 2 => '周', 3 => '月', 4 => '年', 5 => '工作日')
     );
+
     private $key_value_map = array(
         'id'			=> array('name'=>'id', 'width'=>1),
         'name'			=> array('name'=>'名称', 'width'=>8),
@@ -107,7 +108,7 @@ class CalendarAlertController extends Controller
      * @return Response
      * @throws Exception
      */
-    public function lunarbasicAction (Request $request)
+    public function lunarbasicAction(Request $request)
 	{
         $time = $request->get('time');
         $lunar = LunarHelper::getLunarDate($time);
