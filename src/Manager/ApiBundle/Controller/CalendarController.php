@@ -38,7 +38,11 @@ class CalendarController extends Controller
         }
 
         $entity->setAltertTime($date);
-        $entity->setNextTime(LunarHelper::getNextAlert($entity));
+        $next_time = LunarHelper::getNextAlert($entity);
+        if ($next_time == '1970-01-01 08:00:00') {
+            $entity->setStatus(2);
+        }
+        $entity->setNextTime($next_time);
         $em->persist($entity);
         $em->flush();
         return  new JsonResponse(array('code' => 1, 'msg' => '更新成功'));
