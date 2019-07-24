@@ -49,7 +49,7 @@ class LunarHelper
          */
         if ($entity->getStatus() == 0) {
             // 单次执行
-            return $entity->getAlertTime() != self::$defaultString ? $startTime : self::$defaultString;
+            return $date = date('Y-m-d H:i:s');
         }
 
         /*
