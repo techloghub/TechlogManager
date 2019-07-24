@@ -161,7 +161,8 @@ class CalendarAlertController extends Controller
             $entity->setEndTime($endTime);
         }
         $entity->setLunar($request->get('lunar'));
-        $entity->setPeriod($request->get('period', 0));
+        $period = empty($request->get('period')) ? 0 : $request->get('period');
+        $entity->setPeriod($period);
         $entity->setCycleType($request->get('cycle_type'));
         $entity->setRemark($request->get('remark'));
         $entity->setUpdateTime($date);
