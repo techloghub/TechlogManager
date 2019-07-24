@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: "@ManagerUserBundle/Resources/config/services.yml" }
+    - { resource: "@ManagerApiBundle/Resources/config/services.yml" }
     - { resource: "@ManagerTechlogBundle/Resources/config/services.yml" }
 
 framework:
