@@ -49,7 +49,7 @@ class LunarHelper
          */
         if ($entity->getStatus() == 0) {
             // 单次执行
-            return $startTime;
+            return $entity->getAlertTime() != self::$defaultString ? $startTime : self::$defaultString;
         }
 
         /*
@@ -57,7 +57,8 @@ class LunarHelper
          * 停止执行
          * **********************************
          */
-        if ($entity->getCycleType() == 0 || (new DateTime($endTime))->format("U") < time()) {
+        if ($entity->getStatus() == 2
+            || ($entity->getCycleType() == 0 && (new DateTime($endTime))->format("U") < time())) {
             // 停止执行或已停止
             return self::$defaultString;
         }
