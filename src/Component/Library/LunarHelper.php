@@ -112,9 +112,9 @@ class LunarHelper
                         // 阳历
                         $date = date_create(date('Y-m-d H:i:s', $startTimestamp));
                         if ($entity->getCycleType() == 3) {
-                            $date->add(new DateInterval('P'.$period.'Y'));
-                        } else {
                             $date->add(new DateInterval('P'.$period.'M'));
+                        } else {
+                            $date->add(new DateInterval('P'.$period.'Y'));
                         }
                         $startTimestamp = $date->format("U");
                     } else {
