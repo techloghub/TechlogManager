@@ -49,7 +49,7 @@ class LunarHelper
          */
         if ($entity->getStatus() == 0) {
             // 单次执行
-            return $date = date('Y-m-d H:i:s');
+            return max($date = date('Y-m-d H:i:s'), $entity->getStartTime());
         }
 
         /*
