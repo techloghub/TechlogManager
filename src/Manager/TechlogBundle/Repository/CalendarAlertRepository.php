@@ -34,7 +34,7 @@ class CalendarAlertRepository extends EntityRepository
 				$where_sql .= ' desc';
 			$where_sql .= ', id desc';
 		} else {
-			$where_sql .= ' order by status, next_time';
+			$where_sql .= ' order by case when status != 2 then 0 else 1 end, next_time';
 		}
 
         $total_sql .= $where_sql;
