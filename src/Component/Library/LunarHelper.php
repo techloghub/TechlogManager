@@ -16,7 +16,6 @@ use DateInterval;
 use DateTime;
 use Exception;
 use Manager\TechlogBundle\Entity\CalendarAlert;
-use function date_default_timezone_set;
 
 class LunarHelper
 {
@@ -33,7 +32,7 @@ class LunarHelper
      * @throws Exception
      */
     public static function getNextAlert($entity) {
-        date_default_timezone_set('PRC');
+        \date_default_timezone_set('PRC');
         if ($entity->getStatus() != 1 && $entity->getStatus() != 0) {
             return self::$defaultString;
         }
